@@ -1,11 +1,834 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Productivity Dashboard</title>
+
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/dashboard.css">
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
+    >
+
 </head>
+
 <body>
-    
-</body>
-</html>
+
+<main class="dashboard-container">
+
+    <!-- ==========================
+            SIDEBAR
+    =========================== -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-top">
+
+            <h2 class="logo">
+
+                <i class="ri-rocket-2-line"></i>
+
+                <span>Productivity</span>
+
+            </h2>
+
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <ul>
+
+                <li
+                    class="nav-item active"
+                    data-section="dashboard"
+                >
+                    <i class="ri-dashboard-line"></i>
+                    <span>Dashboard</span>
+                </li>
+
+                <li
+                    class="nav-item"
+                    data-section="todo"
+                >
+                    <i class="ri-checkbox-circle-line"></i>
+                    <span>Todo</span>
+                </li>
+
+                <li
+                    class="nav-item"
+                    data-section="planner"
+                >
+                    <i class="ri-calendar-event-line"></i>
+                    <span>Planner</span>
+                </li>
+
+                <li
+                    class="nav-item"
+                    data-section="goals"
+                >
+                    <i class="ri-focus-3-line"></i>
+                    <span>Goals</span>
+                </li>
+
+                <li
+                    class="nav-item"
+                    data-section="pomodoro"
+                >
+                    <i class="ri-timer-line"></i>
+                    <span>Pomodoro</span>
+                </li>
+
+                <li
+                    class="nav-item"
+                    data-section="weather"
+                >
+                    <i class="ri-sun-cloudy-line"></i>
+                    <span>Weather</span>
+                </li>
+
+                <li
+                    class="nav-item"
+                    data-section="quotes"
+                >
+                    <i class="ri-double-quotes-l"></i>
+                    <span>Quotes</span>
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </aside>
+
+    <!-- ==========================
+            MAIN CONTENT
+    =========================== -->
+
+    <section class="main-content">
+
+        <!-- ==========================
+                HEADER
+        =========================== -->
+
+        <header class="top-header">
+
+            <div class="header-left">
+
+                <h1 id="greeting">
+
+                    Welcome
+
+                </h1>
+
+                <p id="current-date">
+
+                    Monday, 1 January 2026
+
+                </p>
+
+            </div>
+
+            <div class="header-right">
+
+                <button
+                    id="theme-toggle"
+                    class="icon-btn"
+                    title="Toggle Theme"
+                >
+
+                    <i class="ri-moon-line"></i>
+
+                </button>
+
+                <div class="user-info">
+
+                    <i class="ri-user-3-line"></i>
+
+                    <span id="user-name">
+
+                        User
+
+                    </span>
+
+                </div>
+
+                <button
+                    id="logout-btn"
+                    class="logout-btn"
+                >
+
+                    <i class="ri-logout-box-r-line"></i>
+
+                    Logout
+
+                </button>
+
+            </div>
+
+        </header>
+
+        <!-- ==========================
+              PAGE CONTENT STARTS
+        =========================== -->
+
+                <!-- ==========================
+                DASHBOARD SECTION
+        =========================== -->
+
+        <section
+            id="dashboard-section"
+            class="page-section active-section"
+        >
+
+            <div class="section-heading">
+
+                <h2>Dashboard Overview</h2>
+
+                <p>
+                    Here's a quick overview of your productivity.
+                </p>
+
+            </div>
+
+            <!-- ==========================
+                    STATS CARDS
+            =========================== -->
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+
+                    <i class="ri-checkbox-circle-line"></i>
+
+                    <h3 id="total-tasks">
+
+                        0
+
+                    </h3>
+
+                    <p>Total Tasks</p>
+
+                </div>
+
+                <div class="stat-card">
+
+                    <i class="ri-loader-4-line"></i>
+
+                    <h3 id="pending-tasks">
+
+                        0
+
+                    </h3>
+
+                    <p>Pending</p>
+
+                </div>
+
+                <div class="stat-card">
+
+                    <i class="ri-check-double-line"></i>
+
+                    <h3 id="completed-tasks">
+
+                        0
+
+                    </h3>
+
+                    <p>Completed</p>
+
+                </div>
+
+                <div class="stat-card">
+
+                    <i class="ri-focus-3-line"></i>
+
+                    <h3 id="goals-count">
+
+                        0
+
+                    </h3>
+
+                    <p>Goals</p>
+
+                </div>
+
+                <div class="stat-card">
+
+                    <i class="ri-timer-line"></i>
+
+                    <h3 id="focus-time">
+
+                        25 min
+
+                    </h3>
+
+                    <p>Focus Session</p>
+
+                </div>
+
+                <div class="stat-card">
+
+                    <i class="ri-sun-cloudy-line"></i>
+
+                    <h3 id="weather-temp">
+
+                        --
+
+                    </h3>
+
+                    <p>Weather</p>
+
+                </div>
+
+            </div>
+
+            <!-- ==========================
+                    QUICK PANELS
+            =========================== -->
+
+            <div class="dashboard-grid">
+
+                <div class="dashboard-card">
+
+                    <div class="card-header">
+
+                        <h3>Today's Tasks</h3>
+
+                    </div>
+
+                    <div id="dashboard-task-preview">
+
+                        No tasks yet.
+
+                    </div>
+
+                </div>
+
+                <div class="dashboard-card">
+
+                    <div class="card-header">
+
+                        <h3>Today's Planner</h3>
+
+                    </div>
+
+                    <div id="dashboard-planner-preview">
+
+                        Nothing scheduled.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ==========================
+                TODO SECTION
+        =========================== -->
+
+        <section
+            id="todo-section"
+            class="page-section hidden"
+        >
+
+            <div class="section-heading">
+
+                <h2>Todo Manager</h2>
+
+                <p>
+
+                    Organize and manage all your daily tasks.
+
+                </p>
+
+            </div>
+
+            <div class="module-container">
+
+            <!-- Toolbar -->
+
+            <div class="todo-toolbar">
+
+                <input
+                    type="text"
+                    id="task-search"
+                    placeholder="Search tasks..."
+                    class="search-input"
+                >
+
+                <select id="category-filter">
+
+                    <option value="all">
+                        All Categories
+                    </option>
+
+                    <option value="Work">
+                        Work
+                    </option>
+
+                    <option value="Study">
+                        Study
+                    </option>
+
+                    <option value="Personal">
+                        Personal
+                    </option>
+
+                    <option value="Shopping">
+                        Shopping
+                    </option>
+
+                    <option value="Health">
+                        Health
+                    </option>
+
+                </select>
+
+                <select id="status-filter">
+
+                    <option value="all">
+                        All Status
+                    </option>
+
+                    <option value="Pending">
+                        Pending
+                    </option>
+
+                    <option value="In Progress">
+                        In Progress
+                    </option>
+
+                    <option value="Completed">
+                        Completed
+                    </option>
+
+                </select>
+
+                <select id="sort-tasks">
+
+                    <option value="newest">
+                        Newest First
+                    </option>
+
+                    <option value="oldest">
+                        Oldest First
+                    </option>
+
+                    <option value="alphabetical">
+                        A-Z
+                    </option>
+
+                </select>
+
+                <button
+                    id="add-task-btn"
+                    class="primary-btn"
+                >
+
+                    <i class="ri-add-line"></i>
+
+                    Add Task
+
+                </button>
+
+            </div>
+
+            <!-- Tasks -->
+
+            <div
+                id="task-list"
+                class="task-list"
+            >
+
+                <div class="empty-state">
+
+                    <i class="ri-inbox-line"></i>
+
+                    <h3>
+
+                        No Tasks Yet
+
+                    </h3>
+
+                    <p>
+
+                        Click "Add Task" to create your first task.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        </section>
+
+        <!-- ==========================
+                PLANNER SECTION
+        =========================== -->
+
+        <section
+            id="planner-section"
+            class="page-section hidden"
+        >
+
+            <div class="section-heading">
+
+                <h2>Daily Planner</h2>
+
+                <p>
+
+                    Plan your day efficiently.
+
+                </p>
+
+            </div>
+
+            <div class="module-container">
+
+                <p>
+
+                    Planner module will be implemented here.
+
+                </p>
+
+            </div>
+
+        </section>
+
+                <!-- ==========================
+                GOALS SECTION
+        =========================== -->
+
+        <section
+            id="goals-section"
+            class="page-section hidden"
+        >
+
+            <div class="section-heading">
+
+                <h2>Goals Tracker</h2>
+
+                <p>
+
+                    Track your personal and professional goals.
+
+                </p>
+
+            </div>
+
+            <div class="module-container">
+
+                <p>
+
+                    Goals module will be implemented here.
+
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- ==========================
+                POMODORO SECTION
+        =========================== -->
+
+        <section
+            id="pomodoro-section"
+            class="page-section hidden"
+        >
+
+            <div class="section-heading">
+
+                <h2>Pomodoro Timer</h2>
+
+                <p>
+
+                    Stay focused using the Pomodoro technique.
+
+                </p>
+
+            </div>
+
+            <div class="module-container">
+
+                <p>
+
+                    Pomodoro timer will be implemented here.
+
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- ==========================
+                WEATHER SECTION
+        =========================== -->
+
+        <section
+            id="weather-section"
+            class="page-section hidden"
+        >
+
+            <div class="section-heading">
+
+                <h2>Weather</h2>
+
+                <p>
+
+                    Check today's weather before planning your day.
+
+                </p>
+
+            </div>
+
+            <div class="module-container">
+
+                <p>
+
+                    Weather widget will be implemented here.
+
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- ==========================
+                QUOTES SECTION
+        =========================== -->
+
+        <section
+            id="quotes-section"
+            class="page-section hidden"
+        >
+
+            <div class="section-heading">
+
+                <h2>Daily Motivation</h2>
+
+                <p>
+
+                    Stay inspired every day.
+
+                </p>
+
+            </div>
+
+            <div class="module-container">
+
+                <p>
+
+                    Daily quotes will appear here.
+
+                </p>
+
+            </div>
+
+        </section>
+
+    </section>
+
+    </main>
+
+    <!-- ==========================
+        TASK MODAL
+    ========================== -->
+
+    <div id="task-modal" class="modal-overlay hidden">
+
+        <div class="modal">
+
+            <div class="modal-header">
+
+                <h2 id="modal-title">
+                    Add New Task
+                </h2>
+
+                <button
+                    id="close-modal"
+                    class="modal-close"
+                    type="button"
+                >
+                    <i class="ri-close-line"></i>
+                </button>
+
+            </div>
+
+            <form id="task-form">
+
+                <input
+                    type="hidden"
+                    id="task-id"
+                >
+
+                <div class="form-group">
+
+                    <label for="task-title">
+                        Task Title
+                    </label>
+
+                    <input
+                        type="text"
+                        id="task-title"
+                        class="form-input"
+                        placeholder="Enter task title"
+                        required
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="task-description">
+                        Description
+                    </label>
+
+                    <textarea
+                        id="task-description"
+                        class="form-input"
+                        rows="4"
+                        placeholder="Write something..."
+                    ></textarea>
+
+                </div>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="task-category">
+                            Category
+                        </label>
+
+                        <select id="task-category">
+
+                            <option>Work</option>
+                            <option>Study</option>
+                            <option>Personal</option>
+                            <option>Shopping</option>
+                            <option>Health</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="task-priority">
+                            Priority
+                        </label>
+
+                        <select id="task-priority">
+
+                            <option>Low</option>
+                            <option selected>Medium</option>
+                            <option>High</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="task-date">
+                            Due Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="task-date"
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="task-status">
+                            Status
+                        </label>
+
+                        <select id="task-status">
+
+                            <option selected>
+                                Pending
+                            </option>
+
+                            <option>
+                                In Progress
+                            </option>
+
+                            <option>
+                                Completed
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <div class="modal-actions">
+
+                    <button
+                        type="button"
+                        id="cancel-task"
+                        class="secondary-btn"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="primary-btn"
+                    >
+                        Save Task
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- ==========================
+            JAVASCRIPT FILES
+    ========================== -->
+
+    <script src="./js/utils.js"></script>
+    <script src="./js/ui.js"></script>
+    <script src="./js/navigation.js"></script>
+    <script src="./js/theme.js"></script>
+    <script src="./js/datetime.js"></script>
+    <script src="./js/todo.js"></script>
+    <script src="./js/planner.js"></script>
+    <script src="./js/goals.js"></script>
+    <script src="./js/pomodoro.js"></script>
+    <script src="./js/weather.js"></script>
+    <script src="./js/quotes.js"></script>
+    <script src="./js/app.js"></script>
+
+    </body>
+    </html>

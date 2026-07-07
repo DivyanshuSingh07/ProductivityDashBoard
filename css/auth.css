@@ -1,0 +1,433 @@
+/* ===========================
+   GOOGLE FONT
+=========================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+/* ===========================
+   RESET
+=========================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Poppins",sans-serif;
+}
+
+html{
+    font-size:16px;
+}
+
+body{
+    min-height:100vh;
+    background:#f5f7fb;
+    color:#222;
+}
+
+/* ===========================
+   VARIABLES
+=========================== */
+
+:root{
+
+    --primary:#2563eb;
+    --primary-dark:#1d4ed8;
+
+    --secondary:#38bdf8;
+
+    --white:#ffffff;
+
+    --border:#d9dce5;
+
+    --text:#1f2937;
+
+    --text-light:#6b7280;
+
+    --danger:#ef4444;
+
+    --success:#16a34a;
+
+    --shadow:0 12px 30px rgba(0,0,0,.08);
+
+    --radius:16px;
+
+}
+
+/* ===========================
+   PAGE
+=========================== */
+
+.auth-page{
+
+    width:100%;
+    min-height:100vh;
+
+    display:flex;
+
+}
+
+/* ===========================
+   LEFT
+=========================== */
+
+.brand-section{
+
+    width:45%;
+
+    background:var(--primary);
+
+    color:white;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:70px;
+
+}
+
+.brand-content{
+
+    max-width:430px;
+
+}
+
+.logo{
+
+    font-size:2.2rem;
+
+    margin-bottom:25px;
+
+    font-weight:700;
+
+}
+
+.brand-content h2{
+
+    font-size:3rem;
+
+    line-height:1.15;
+
+    margin-bottom:25px;
+
+}
+
+.brand-content p{
+
+    line-height:1.8;
+
+    opacity:.9;
+
+    font-size:1rem;
+
+}
+
+/* ===========================
+   RIGHT
+=========================== */
+
+.auth-section{
+
+    width:55%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:40px;
+
+}
+
+.auth-card{
+
+    width:100%;
+
+    max-width:500px;
+
+    background:var(--white);
+
+    border-radius:var(--radius);
+
+    box-shadow:var(--shadow);
+
+    padding:40px;
+
+}
+
+/* ===========================
+   TAB BUTTONS
+=========================== */
+
+.form-header{
+
+    display:flex;
+
+    gap:15px;
+
+    margin-bottom:35px;
+
+}
+
+.tab-btn{
+
+    flex:1;
+
+    padding:14px;
+
+    border:none;
+
+    background:#eef2ff;
+
+    border-radius:12px;
+
+    font-size:1rem;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.tab-btn.active{
+
+    background:var(--primary);
+
+    color:white;
+
+}
+
+/* ===========================
+   FORM
+=========================== */
+
+.auth-form h2{
+
+    margin-bottom:10px;
+
+    color:var(--text);
+
+}
+
+.auth-form>p{
+
+    color:var(--text-light);
+
+    margin-bottom:30px;
+
+}
+
+/* ===========================
+   GROUP
+=========================== */
+
+.form-group{
+
+    margin-bottom:22px;
+
+}
+
+.form-group label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    font-weight:500;
+
+}
+
+.form-input{
+
+    width:100%;
+
+    padding:14px 16px;
+
+    border:1px solid var(--border);
+
+    border-radius:12px;
+
+    font-size:1rem;
+
+    outline:none;
+
+    transition:.3s;
+
+}
+
+.form-input:focus{
+
+    border-color:var(--primary);
+
+}
+
+/* ===========================
+   PASSWORD
+=========================== */
+
+.password-box{
+
+    position:relative;
+
+}
+
+.password-box .form-input{
+
+    padding-right:55px;
+
+}
+
+.password-toggle{
+
+    position:absolute;
+
+    right:15px;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    border:none;
+
+    background:none;
+
+    cursor:pointer;
+
+    font-size:1.2rem;
+
+    color:#666;
+
+}
+
+/* ===========================
+   BUTTON
+=========================== */
+
+.primary-btn{
+
+    width:100%;
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:var(--primary);
+
+    color:white;
+
+    cursor:pointer;
+
+    font-size:1rem;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.primary-btn:hover{
+
+    background:var(--primary-dark);
+
+}
+
+/* ===========================
+   ERROR
+=========================== */
+
+.error-message{
+
+    display:block;
+
+    min-height:18px;
+
+    color:var(--danger);
+
+    font-size:.85rem;
+
+    margin-top:5px;
+
+}
+
+/* ===========================
+   HIDDEN
+=========================== */
+
+.hidden{
+
+    display:none;
+
+}
+
+
+.auth-message{
+    display:none;
+    padding:12px;
+    margin-bottom:20px;
+    border-radius:10px;
+    font-size:.9rem;
+}
+
+.auth-message.success{
+    display:block;
+    background:#dcfce7;
+    color:#166534;
+}
+
+.auth-message.error{
+    display:block;
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+
+
+/* ===========================
+   MOBILE
+=========================== */
+
+@media(max-width:900px){
+
+    .auth-page{
+
+        flex-direction:column;
+
+    }
+
+    .brand-section{
+
+        width:100%;
+
+        padding:50px 30px;
+
+        text-align:center;
+
+    }
+
+    .brand-content h2{
+
+        font-size:2.3rem;
+
+    }
+
+    .auth-section{
+
+        width:100%;
+
+        padding:25px;
+
+    }
+
+    .auth-card{
+
+        max-width:100%;
+
+    }
+
+}
