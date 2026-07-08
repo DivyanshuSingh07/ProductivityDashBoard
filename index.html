@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="./css/goals.css" />
     <link rel="stylesheet" href="./css/pomodoro.css" />
     <link rel="stylesheet" href="./css/quotes.css" />
+    <link rel="stylesheet" href="./css/weather.css" />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
@@ -172,7 +173,8 @@
             <div class="stat-card">
               <i class="ri-sun-cloudy-line"></i>
 
-              <h3 id="weather-temp">--</h3>
+              <!-- Dashboard -->
+                <h3 id="dashboard-weather-temp">--</h3>
 
               <p>Weather</p>
             </div>
@@ -450,11 +452,69 @@
           <div class="section-heading">
             <h2>Weather</h2>
 
-            <p>Check today's weather before planning your day.</p>
+            <p>Check current weather anywhere.</p>
           </div>
 
-          <div class="module-container">
-            <p>Weather widget will be implemented here.</p>
+          <div class="weather-container">
+            <div class="weather-search">
+              <input
+                type="text"
+                id="city-input"
+                placeholder="Enter city name..."
+              />
+
+              <button id="search-weather" class="primary-btn">
+                <i class="ri-search-line"></i>
+
+                Search
+              </button>
+
+              <button id="current-location" class="secondary-btn">
+                <i class="ri-map-pin-line"></i>
+
+                Current Location
+              </button>
+            </div>
+
+            <div id="weather-loader" class="hidden">Loading weather...</div>
+
+            <div id="weather-card" class="weather-card">
+              <div class="weather-top">
+                <i id="weather-icon" class="ri-sun-line"></i>
+
+                <div>
+                  <h2 id="weather-city">--</h2>
+
+                  <p id="weather-description">--</p>
+                </div>
+              </div>
+
+              <div class="temperature">
+                <span id="weather-temp"> -- </span>
+
+                °C
+              </div>
+
+              <div class="weather-details">
+                <div>
+                  <span>Feels Like</span>
+
+                  <strong id="feels-like"> -- </strong>
+                </div>
+
+                <div>
+                  <span>Humidity</span>
+
+                  <strong id="humidity"> -- </strong>
+                </div>
+
+                <div>
+                  <span>Wind</span>
+
+                  <strong id="wind-speed"> -- </strong>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 

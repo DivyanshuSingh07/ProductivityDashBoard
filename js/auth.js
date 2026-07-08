@@ -250,6 +250,18 @@ registerForm.addEventListener("submit", (e) => {
 
       longBreak: 15,
     },
+
+    weather: {
+
+    city: "",
+
+    temperature: null,
+
+    description: "",
+
+    updatedAt: null
+
+},
   };
 
   users.push(newUser);

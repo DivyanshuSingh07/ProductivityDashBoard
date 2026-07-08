@@ -30,6 +30,8 @@ function initializeApp() {
 
     initializePomodoro();
 
+    initializeWeather()
+
     initializeQuotes();
 
     initializeLogout();
