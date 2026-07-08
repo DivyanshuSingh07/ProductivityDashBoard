@@ -1,0 +1,417 @@
+/* ==========================
+        PAGE
+========================== */
+
+.pomodoro-page{
+
+    display:flex;
+
+    justify-content:center;
+
+    padding:2rem;
+
+}
+
+/* ==========================
+        CARD
+========================== */
+
+.pomodoro-card{
+
+    width:100%;
+    max-width:900px;
+
+    padding:2.5rem;
+
+    border-radius:28px;
+
+    background:rgba(255,255,255,.08);
+
+    backdrop-filter:blur(18px);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    box-shadow:
+    0 20px 60px rgba(0,0,0,.15);
+
+    text-align:center;
+
+}
+
+/* ==========================
+        HEADER
+========================== */
+
+.pomodoro-header h2{
+
+    font-size:2rem;
+
+    font-weight:700;
+
+    margin-bottom:.5rem;
+
+}
+
+.pomodoro-header p{
+
+    opacity:.7;
+
+    margin-bottom:2.5rem;
+
+    font-size:1rem;
+
+}
+
+/* ==========================
+        TIMER
+========================== */
+
+.timer-wrapper{
+
+    position:relative;
+
+    width:450px;
+
+    height:450px;
+
+    margin:auto;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+/* ==========================
+        SVG
+========================== */
+
+.progress-ring{
+
+    transform:rotate(-90deg);
+
+}
+
+.progress-bg{
+
+    fill:none;
+
+    stroke:rgba(255,255,255,.08);
+
+    stroke-width:14;
+
+}
+
+.progress-bar{
+
+    fill:none;
+
+    stroke:#5B8CFF;
+
+    stroke-width:14;
+
+    stroke-linecap:round;
+
+    stroke-dasharray:1131;
+
+    stroke-dashoffset:1131;
+
+    transition:stroke-dashoffset .8s linear;
+
+}
+
+/* ==========================
+        CONTENT
+========================== */
+
+.timer-content{
+
+    position:absolute;
+
+    inset:0;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+#timer-display{
+
+    font-size:5rem;
+
+    font-weight:800;
+
+    line-height:1;
+
+    letter-spacing:2px;
+
+}
+
+#timer-mode{
+
+    margin-top:1rem;
+
+    font-size:1rem;
+
+    letter-spacing:4px;
+
+    opacity:.65;
+
+    text-transform:uppercase;
+
+}
+
+/* ==========================
+        MODES
+========================== */
+
+.mode-selector{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:1rem;
+
+    margin-top:2.5rem;
+
+    margin-bottom:2rem;
+
+}
+
+.mode-btn{
+
+    border:none;
+
+    padding:.9rem 1.5rem;
+
+    border-radius:999px;
+
+    cursor:pointer;
+
+    font-size:.95rem;
+
+    transition:.3s;
+
+    background:rgba(255,255,255,.08);
+
+}
+
+.mode-btn:hover{
+
+    transform:translateY(-3px);
+
+}
+
+.mode-btn.active{
+
+    background:#5B8CFF;
+
+    color:white;
+
+    box-shadow:0 8px 25px rgba(91,140,255,.35);
+
+}
+
+/* ==========================
+        BUTTONS
+========================== */
+
+.timer-buttons{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:1.5rem;
+
+}
+
+.timer-buttons button{
+
+    width:72px;
+
+    height:72px;
+
+    border:none;
+
+    border-radius:50%;
+
+    cursor:pointer;
+
+    font-size:1.6rem;
+
+    transition:.3s;
+
+    background:rgba(255,255,255,.08);
+
+    backdrop-filter:blur(10px);
+
+}
+
+.timer-buttons button:hover{
+
+    transform:translateY(-5px) scale(1.08);
+
+}
+
+#start-timer{
+
+    background:#4CAF50;
+
+    color:white;
+
+}
+
+#pause-timer{
+
+    background:#FF9800;
+
+    color:white;
+
+}
+
+#reset-timer{
+
+    background:#F44336;
+
+    color:white;
+
+}
+
+/* ==========================
+        STATS
+========================== */
+
+.pomodoro-stats{
+
+    margin-top:3rem;
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:1.5rem;
+
+}
+
+.pomodoro-stat{
+
+    padding:1.5rem;
+
+    border-radius:20px;
+
+    background:rgba(255,255,255,.05);
+
+}
+
+.pomodoro-stat h3{
+
+    font-size:2rem;
+
+    margin-bottom:.5rem;
+
+}
+
+.pomodoro-stat span{
+
+    opacity:.7;
+
+}
+
+/* ==========================
+        RUNNING
+========================== */
+
+.running .progress-bar{
+
+    animation:pulse 2s infinite;
+
+}
+
+@keyframes pulse{
+
+0%{
+
+filter:drop-shadow(0 0 8px #5B8CFF);
+
+}
+
+50%{
+
+filter:drop-shadow(0 0 25px #5B8CFF);
+
+}
+
+100%{
+
+filter:drop-shadow(0 0 8px #5B8CFF);
+
+}
+
+}
+
+/* ==========================
+        RESPONSIVE
+========================== */
+
+@media(max-width:768px){
+
+.timer-wrapper{
+
+width:320px;
+
+height:320px;
+
+}
+
+.progress-ring{
+
+width:320px;
+
+height:320px;
+
+}
+
+#timer-display{
+
+font-size:3.5rem;
+
+}
+
+.pomodoro-stats{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
+}
+
+@media(max-width:520px){
+
+.mode-selector{
+
+flex-direction:column;
+
+}
+
+.pomodoro-stats{
+
+grid-template-columns:1fr;
+
+}
+
+.timer-buttons{
+
+gap:1rem;
+
+}
+
+}

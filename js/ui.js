@@ -79,6 +79,37 @@ function closeTaskModal() {
 }
 
 /* ==========================
+        PLANNER MODAL
+========================== */
+
+function openPlannerModal() {
+
+    const modal = document.getElementById("planner-modal");
+
+    if (!modal) return;
+
+    modal.classList.remove("hidden");
+
+}
+
+function closePlannerModal() {
+
+    const modal = document.getElementById("planner-modal");
+
+    if (!modal) return;
+
+    modal.classList.add("hidden");
+
+    document.getElementById("planner-form").reset();
+
+    document.getElementById("event-id").value = "";
+
+    document.getElementById("selected-date").value = "";
+
+}
+
+
+/* ==========================
         INITIALIZE MODAL
 ========================== */
 
@@ -91,6 +122,46 @@ function initializeModal() {
     const cancelBtn = document.getElementById("cancel-task");
 
     const overlay = document.getElementById("task-modal");
+
+    /* Planner Modal */
+
+    const plannerClose = document.getElementById("close-planner-modal");
+
+    const plannerCancel = document.getElementById("cancel-event");
+
+    const plannerOverlay = document.getElementById("planner-modal");
+
+    if (plannerClose) {
+
+        plannerClose.addEventListener(
+            "click",
+            closePlannerModal
+        );
+
+    }
+
+    if (plannerCancel) {
+
+        plannerCancel.addEventListener(
+            "click",
+            closePlannerModal
+        );
+
+    }
+
+    if (plannerOverlay) {
+
+        plannerOverlay.addEventListener("click", (event) => {
+
+            if (event.target === plannerOverlay) {
+
+                closePlannerModal();
+
+            }
+
+        });
+
+    }
 
     if(addTaskBtn){
 

@@ -526,4 +526,8 @@ function updateDashboardStats() {
 
     document.getElementById("completed-tasks").textContent = completed;
 
+    const goals = user.goals.length;
+
+    document.getElementById("goals-count").textContent = goals;
+
 }

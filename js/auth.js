@@ -13,29 +13,24 @@ const registerBtn = document.getElementById("register-btn");
 
 const authMessage = document.getElementById("auth-message");
 
-
 /* ==========================
    TAB SWITCHING
 ========================== */
 
 loginTab.addEventListener("click", () => {
+  loginTab.classList.add("active");
+  registerTab.classList.remove("active");
 
-    loginTab.classList.add("active");
-    registerTab.classList.remove("active");
-
-    loginForm.classList.remove("hidden");
-    registerForm.classList.add("hidden");
-
+  loginForm.classList.remove("hidden");
+  registerForm.classList.add("hidden");
 });
 
 registerTab.addEventListener("click", () => {
+  registerTab.classList.add("active");
+  loginTab.classList.remove("active");
 
-    registerTab.classList.add("active");
-    loginTab.classList.remove("active");
-
-    registerForm.classList.remove("hidden");
-    loginForm.classList.add("hidden");
-
+  registerForm.classList.remove("hidden");
+  loginForm.classList.add("hidden");
 });
 
 /* ==========================
@@ -46,250 +41,174 @@ togglePassword("login-password", "login-password-toggle");
 togglePassword("password", "register-password-toggle");
 togglePassword("confirm-password", "confirm-password-toggle");
 
-function togglePassword(inputId, buttonId){
+function togglePassword(inputId, buttonId) {
+  const input = document.getElementById(inputId);
+  const button = document.getElementById(buttonId);
 
-    const input = document.getElementById(inputId);
-    const button = document.getElementById(buttonId);
-
-    button.addEventListener("click",()=>{
-
-        if(input.type==="password"){
-
-            input.type="text";
-            button.innerHTML='<i class="ri-eye-off-line"></i>';
-
-        }else{
-
-            input.type="password";
-            button.innerHTML='<i class="ri-eye-line"></i>';
-
-        }
-
-    });
-
+  button.addEventListener("click", () => {
+    if (input.type === "password") {
+      input.type = "text";
+      button.innerHTML = '<i class="ri-eye-off-line"></i>';
+    } else {
+      input.type = "password";
+      button.innerHTML = '<i class="ri-eye-line"></i>';
+    }
+  });
 }
 
 /* ==========================
    HELPERS
 ========================== */
 
+function showMessage(message, type) {
+  authMessage.textContent = message;
 
-function showMessage(message,type){
+  authMessage.className = `auth-message ${type}`;
 
-    authMessage.textContent = message;
-
-    authMessage.className = `auth-message ${type}`;
-
-    setTimeout(()=>{
-
-        authMessage.className = "auth-message";
-        authMessage.textContent = "";
-
-    },3000);
-
+  setTimeout(() => {
+    authMessage.className = "auth-message";
+    authMessage.textContent = "";
+  }, 3000);
 }
 
-function clearErrors(form){
-
-    form.querySelectorAll(".error-message").forEach(error=>{
-
-        error.textContent="";
-
-    });
-
+function clearErrors(form) {
+  form.querySelectorAll(".error-message").forEach((error) => {
+    error.textContent = "";
+  });
 }
 
-function setError(input,message){
+function setError(input, message) {
+  const error = input.closest(".form-group").querySelector(".error-message");
 
-    const error = input
-        .closest(".form-group")
-        .querySelector(".error-message");
-
-    error.textContent = message;
-
+  error.textContent = message;
 }
 
 /* ==========================
    REGISTER
 ========================== */
 
-registerForm.addEventListener("submit",(e)=>{
+registerForm.addEventListener("submit", (e) => {
+  e.preventDefault();
 
-    e.preventDefault();
+  registerBtn.disabled = true;
+  registerBtn.textContent = "Creating...";
 
-    registerBtn.disabled = true;
-    registerBtn.textContent = "Creating...";
+  clearErrors(registerForm);
 
-    clearErrors(registerForm);
+  const fullName = document.getElementById("full-name");
+  const username = document.getElementById("username");
+  const email = document.getElementById("email");
+  const password = document.getElementById("password");
+  const confirm = document.getElementById("confirm-password");
 
-    const fullName = document.getElementById("full-name");
-    const username = document.getElementById("username");
-    const email = document.getElementById("email");
-    const password = document.getElementById("password");
-    const confirm = document.getElementById("confirm-password");
+  const fullNameValue = fullName.value.trim().replace(/\s+/g, " ");
 
-    const fullNameValue = fullName.value
-        .trim()
-        .replace(/\s+/g," ");
+  const usernameValue = username.value.trim().toLowerCase();
 
-    const usernameValue = username.value
-        .trim()
-        .toLowerCase();
+  const emailValue = email.value.trim().toLowerCase();
 
-    const emailValue = email.value
-        .trim()
-        .toLowerCase();
+  const passwordValue = password.value;
 
-    const passwordValue = password.value;
+  const confirmValue = confirm.value;
 
-    const confirmValue = confirm.value;
+  let valid = true;
 
-    let valid = true;
+  /* ---------- FULL NAME ---------- */
 
-    /* ---------- FULL NAME ---------- */
+  if (fullNameValue === "") {
+    setError(fullName, "Full Name is required.");
+    valid = false;
+  } else if (fullNameValue.length < 3) {
+    setError(fullName, "Minimum 3 characters required.");
+    valid = false;
+  } else if (fullNameValue.length > 50) {
+    setError(fullName, "Maximum 50 characters allowed.");
+    valid = false;
+  }
 
-    if(fullNameValue===""){
+  /* ---------- USERNAME ---------- */
 
-        setError(fullName,"Full Name is required.");
-        valid=false;
+  const usernameRegex = /^[A-Za-z0-9_]+$/;
 
-    }
-    else if(fullNameValue.length<3){
+  if (usernameValue === "") {
+    setError(username, "Username is required.");
+    valid = false;
+  } else if (usernameValue.length < 3) {
+    setError(username, "Minimum 3 characters required.");
+    valid = false;
+  } else if (usernameValue.length > 20) {
+    setError(username, "Maximum 20 characters allowed.");
+    valid = false;
+  } else if (!usernameRegex.test(usernameValue)) {
+    setError(username, "Only letters, numbers and underscore are allowed.");
 
-        setError(fullName,"Minimum 3 characters required.");
-        valid=false;
+    valid = false;
+  }
 
-    }
-    else if(fullNameValue.length>50){
+  /* ---------- EMAIL ---------- */
 
-        setError(fullName,"Maximum 50 characters allowed.");
-        valid=false;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    }
+  if (emailValue === "") {
+    setError(email, "Email is required.");
+    valid = false;
+  } else if (!emailRegex.test(emailValue)) {
+    setError(email, "Enter a valid email.");
+    valid = false;
+  }
 
-    /* ---------- USERNAME ---------- */
+  /* ---------- PASSWORD ---------- */
 
-    const usernameRegex=/^[A-Za-z0-9_]+$/;
+  if (passwordValue === "") {
+    setError(password, "Password is required.");
+    valid = false;
+  } else if (passwordValue.length < 8) {
+    setError(password, "Password must be at least 8 characters.");
+    valid = false;
+  }
 
-    if(usernameValue===""){
+  /* ---------- CONFIRM PASSWORD ---------- */
 
-        setError(username,"Username is required.");
-        valid=false;
+  if (confirmValue === "") {
+    setError(confirm, "Please confirm your password.");
+    valid = false;
+  } else if (passwordValue !== confirmValue) {
+    setError(confirm, "Passwords do not match.");
+    valid = false;
+  }
 
-    }
-    else if(usernameValue.length<3){
+  const users = getUsers();
 
-        setError(username,"Minimum 3 characters required.");
-        valid=false;
+  /* ---------- DUPLICATE USERNAME ---------- */
 
-    }
-    else if(usernameValue.length>20){
+  const usernameExists = users.some(
+    (user) => user.username.toLowerCase() === usernameValue,
+  );
 
-        setError(username,"Maximum 20 characters allowed.");
-        valid=false;
+  if (usernameExists) {
+    setError(username, "Username already exists.");
+    valid = false;
+  }
 
-    }
-    else if(!usernameRegex.test(usernameValue)){
+  /* ---------- DUPLICATE EMAIL ---------- */
 
-        setError(
-            username,
-            "Only letters, numbers and underscore are allowed."
-        );
+  const emailExists = users.some(
+    (user) => user.email.toLowerCase() === emailValue,
+  );
 
-        valid=false;
+  if (emailExists) {
+    setError(email, "Email already registered.");
+    valid = false;
+  }
 
-    }
+  if (!valid) {
+    registerBtn.disabled = false;
+    registerBtn.textContent = "Create Account";
 
-    /* ---------- EMAIL ---------- */
+    return;
+  }
 
-    const emailRegex=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if(emailValue===""){
-
-        setError(email,"Email is required.");
-        valid=false;
-
-    }
-    else if(!emailRegex.test(emailValue)){
-
-        setError(email,"Enter a valid email.");
-        valid=false;
-
-    }
-
-    /* ---------- PASSWORD ---------- */
-
-    if(passwordValue===""){
-
-        setError(password,"Password is required.");
-        valid=false;
-
-    }
-    else if(passwordValue.length<8){
-
-        setError(password,"Password must be at least 8 characters.");
-        valid=false;
-
-    }
-
-    /* ---------- CONFIRM PASSWORD ---------- */
-
-    if(confirmValue===""){
-
-        setError(confirm,"Please confirm your password.");
-        valid=false;
-
-    }
-    else if(passwordValue!==confirmValue){
-
-        setError(confirm,"Passwords do not match.");
-        valid=false;
-
-    }
-
-    const users=getUsers();
-
-    /* ---------- DUPLICATE USERNAME ---------- */
-
-    const usernameExists=users.some(user=>
-
-        user.username.toLowerCase()===usernameValue
-
-    );
-
-    if(usernameExists){
-
-        setError(username,"Username already exists.");
-        valid=false;
-
-    }
-
-    /* ---------- DUPLICATE EMAIL ---------- */
-
-    const emailExists=users.some(user=>
-
-        user.email.toLowerCase()===emailValue
-
-    );
-
-    if(emailExists){
-
-        setError(email,"Email already registered.");
-        valid=false;
-
-    }
-
-    if(!valid){
-
-        registerBtn.disabled=false;
-        registerBtn.textContent="Create Account";
-
-        return;
-
-    }
-
-    const newUser = {
-
+  const newUser = {
     id: Date.now(),
 
     fullName: fullNameValue,
@@ -313,193 +232,146 @@ registerForm.addEventListener("submit",(e)=>{
     goals: [],
 
     pomodoro: {
+      sessions: 0,
 
-        focus: 25,
+      focusMinutes: 0,
 
-        shortBreak: 5,
+      streak: 0,
 
-        longBreak: 15
+      completed: 0,
 
-    }
+      started: 0,
 
-    };
+      focus: 25,
 
-    users.push(newUser);
+      shortBreak: 5,
 
-    saveUsers(users);
+      longBreak: 15,
+    },
+  };
 
-    registerForm.reset();
+  users.push(newUser);
 
-    registerBtn.disabled=false;
-    registerBtn.textContent="Create Account";
+  saveUsers(users);
 
-    showMessage(
-        "Account created successfully! Please login.",
-        "success"
-    );
+  registerForm.reset();
 
-    loginTab.click();
+  registerBtn.disabled = false;
+  registerBtn.textContent = "Create Account";
 
+  showMessage("Account created successfully! Please login.", "success");
+
+  loginTab.click();
 });
 
 /* ==========================
    LOGIN
 ========================== */
 
-
 loginForm.addEventListener("submit", (e) => {
+  e.preventDefault();
 
-    e.preventDefault();
+  loginBtn.disabled = true;
+  loginBtn.textContent = "Logging In...";
 
-    loginBtn.disabled = true;
-    loginBtn.textContent = "Logging In...";
+  clearErrors(loginForm);
 
-    clearErrors(loginForm);
+  const identifier = document.getElementById("login-identifier");
+  const password = document.getElementById("login-password");
 
-    const identifier = document.getElementById("login-identifier");
-    const password = document.getElementById("login-password");
+  const identifierValue = identifier.value.trim().toLowerCase();
 
-    const identifierValue = identifier.value
-        .trim()
-        .toLowerCase();
+  const passwordValue = password.value;
 
-    const passwordValue = password.value;
+  /* ---------- EMPTY VALIDATION ---------- */
 
-    /* ---------- EMPTY VALIDATION ---------- */
+  if (identifierValue === "") {
+    setError(identifier, "Username or Email is required.");
 
-    if (identifierValue === "") {
+    loginBtn.disabled = false;
+    loginBtn.textContent = "Login";
 
-        setError(
-            identifier,
-            "Username or Email is required."
-        );
+    return;
+  }
 
-        loginBtn.disabled = false;
-        loginBtn.textContent = "Login";
+  if (passwordValue === "") {
+    setError(password, "Password is required.");
 
-        return;
+    loginBtn.disabled = false;
+    loginBtn.textContent = "Login";
 
-    }
+    return;
+  }
 
-    if (passwordValue === "") {
+  /* ---------- FIND USER ---------- */
 
-        setError(
-            password,
-            "Password is required."
-        );
+  const users = getUsers();
 
-        loginBtn.disabled = false;
-        loginBtn.textContent = "Login";
+  const user = users.find(
+    (user) =>
+      user.username.toLowerCase() === identifierValue ||
+      user.email.toLowerCase() === identifierValue,
+  );
 
-        return;
+  if (!user) {
+    setError(identifier, "No account found. Please create an account first.");
 
-    }
+    loginBtn.disabled = false;
+    loginBtn.textContent = "Login";
 
-    /* ---------- FIND USER ---------- */
+    return;
+  }
 
-    const users = getUsers();
+  /* ---------- PASSWORD CHECK ---------- */
 
-    const user = users.find(user =>
+  if (user.password !== passwordValue) {
+    setError(password, "Incorrect password.");
 
-        user.username.toLowerCase() === identifierValue ||
+    loginBtn.disabled = false;
+    loginBtn.textContent = "Login";
 
-        user.email.toLowerCase() === identifierValue
+    return;
+  }
 
-    );
+  /* ---------- SAVE SESSION ---------- */
 
-    if (!user) {
+  saveCurrentUser(user.id);
 
-        setError(
-            identifier,
-            "No account found. Please create an account first."
-        );
+  showMessage(`Welcome back, ${user.fullName}!`, "success");
 
-        loginBtn.disabled = false;
-        loginBtn.textContent = "Login";
-
-        return;
-
-    }
-
-    /* ---------- PASSWORD CHECK ---------- */
-
-    if (user.password !== passwordValue) {
-
-        setError(
-            password,
-            "Incorrect password."
-        );
-
-        loginBtn.disabled = false;
-        loginBtn.textContent = "Login";
-
-        return;
-
-    }
-
-    /* ---------- SAVE SESSION ---------- */
-
-    saveCurrentUser(user.id);
-
-    showMessage(
-        `Welcome back, ${user.fullName}!`,
-        "success"
-    );
-
-    setTimeout(() => {
-
-        window.location.href = "../index.html";
-
-    }, 800);
-
+  setTimeout(() => {
+    window.location.href = "../index.html";
+  }, 800);
 });
 
 /* ==========================
    AUTO LOGIN
 ========================== */
 
-const currentUser = JSON.parse(
-    localStorage.getItem(CURRENT_USER_KEY)
-);
+const currentUser = JSON.parse(localStorage.getItem(CURRENT_USER_KEY));
 
 if (currentUser) {
+  const users = getUsers();
 
-    const users = getUsers();
+  const loggedInUser = users.find((user) => user.id === currentUser.id);
 
-    const loggedInUser = users.find(user =>
-
-        user.id === currentUser.id
-
-    );
-
-    if (loggedInUser) {
-
-        window.location.href = "../index.html";
-
-    } else {
-
-        localStorage.removeItem(CURRENT_USER_KEY);
-
-    }
-
+  if (loggedInUser) {
+    window.location.href = "../index.html";
+  } else {
+    localStorage.removeItem(CURRENT_USER_KEY);
+  }
 }
 
 /* ==========================
    CLEAR ERRORS ON INPUT
 ========================== */
 
-document.querySelectorAll(".form-input").forEach(input => {
+document.querySelectorAll(".form-input").forEach((input) => {
+  input.addEventListener("input", () => {
+    const error = input.closest(".form-group").querySelector(".error-message");
 
-    input.addEventListener("input", () => {
-
-        const error = input
-            .closest(".form-group")
-            .querySelector(".error-message");
-
-        error.textContent = "";
-
-    });
-
+    error.textContent = "";
+  });
 });
 
 /* ==========================
@@ -507,19 +379,13 @@ document.querySelectorAll(".form-input").forEach(input => {
 ========================== */
 
 document.addEventListener("keydown", (event) => {
+  if (event.key !== "Enter") return;
 
-    if (event.key !== "Enter") return;
+  if (!loginForm.classList.contains("hidden")) {
+    loginBtn.click();
+  }
 
-    if (!loginForm.classList.contains("hidden")) {
-
-        loginBtn.click();
-
-    }
-
-    if (!registerForm.classList.contains("hidden")) {
-
-        registerBtn.click();
-
-    }
-
+  if (!registerForm.classList.contains("hidden")) {
+    registerBtn.click();
+  }
 });

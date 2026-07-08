@@ -24,6 +24,12 @@ function initializeApp() {
 
     initializeTodo();
 
+    initializePlanner();
+
+    initializeGoals();
+
+    initializePomodoro();
+
     initializeLogout();
 
 }

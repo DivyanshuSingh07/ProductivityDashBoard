@@ -14,8 +14,6 @@ function initializeNavigation() {
 
             const targetSection = item.dataset.section;
 
-            /* Remove Active Navigation */
-
             navItems.forEach(nav => {
 
                 nav.classList.remove("active");
@@ -23,8 +21,6 @@ function initializeNavigation() {
             });
 
             item.classList.add("active");
-
-            /* Hide All Sections */
 
             sections.forEach(section => {
 
@@ -34,19 +30,16 @@ function initializeNavigation() {
 
             });
 
-            /* Show Selected Section */
-
             const activeSection = document.getElementById(
-                `${targetSection}-section`
-            );
+            `${targetSection}-section`);
 
             if (activeSection) {
 
                 requestAnimationFrame(() => {
 
-                activeSection.classList.remove("hidden");
+                    activeSection.classList.remove("hidden");
 
-                activeSection.classList.add("active-section");
+                    activeSection.classList.add("active-section");
 
                 });
 

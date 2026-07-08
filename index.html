@@ -1,648 +1,478 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
 
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Productivity Dashboard</title>
 
-    <link rel="stylesheet" href="./css/style.css">
-    <link rel="stylesheet" href="./css/dashboard.css">
-
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/dashboard.css" />
+    <link rel="stylesheet" href="./css/planner.css" />
+    <link rel="stylesheet" href="./css/goals.css" />
+    <link rel="stylesheet" href="./css/pomodoro.css" />
     <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
-    >
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
+    />
+  </head>
 
-</head>
-
-<body>
-
-<main class="dashboard-container">
-
-    <!-- ==========================
+  <body>
+    <main class="dashboard-container">
+      <!-- ==========================
             SIDEBAR
     =========================== -->
 
-    <aside class="sidebar">
-
+      <aside class="sidebar">
         <div class="sidebar-top">
+          <h2 class="logo">
+            <i class="ri-rocket-2-line"></i>
 
-            <h2 class="logo">
-
-                <i class="ri-rocket-2-line"></i>
-
-                <span>Productivity</span>
-
-            </h2>
-
+            <span>Productivity</span>
+          </h2>
         </div>
 
         <nav class="sidebar-nav">
+          <ul>
+            <li class="nav-item active" data-section="dashboard">
+              <i class="ri-dashboard-line"></i>
+              <span>Dashboard</span>
+            </li>
 
-            <ul>
+            <li class="nav-item" data-section="todo">
+              <i class="ri-checkbox-circle-line"></i>
+              <span>Todo</span>
+            </li>
 
-                <li
-                    class="nav-item active"
-                    data-section="dashboard"
-                >
-                    <i class="ri-dashboard-line"></i>
-                    <span>Dashboard</span>
-                </li>
+            <li class="nav-item" data-section="planner">
+              <i class="ri-calendar-event-line"></i>
+              <span>Planner</span>
+            </li>
 
-                <li
-                    class="nav-item"
-                    data-section="todo"
-                >
-                    <i class="ri-checkbox-circle-line"></i>
-                    <span>Todo</span>
-                </li>
+            <li class="nav-item" data-section="goals">
+              <i class="ri-focus-3-line"></i>
+              <span>Goals</span>
+            </li>
 
-                <li
-                    class="nav-item"
-                    data-section="planner"
-                >
-                    <i class="ri-calendar-event-line"></i>
-                    <span>Planner</span>
-                </li>
+            <li class="nav-item" data-section="pomodoro">
+              <i class="ri-timer-line"></i>
+              <span>Pomodoro</span>
+            </li>
 
-                <li
-                    class="nav-item"
-                    data-section="goals"
-                >
-                    <i class="ri-focus-3-line"></i>
-                    <span>Goals</span>
-                </li>
+            <li class="nav-item" data-section="weather">
+              <i class="ri-sun-cloudy-line"></i>
+              <span>Weather</span>
+            </li>
 
-                <li
-                    class="nav-item"
-                    data-section="pomodoro"
-                >
-                    <i class="ri-timer-line"></i>
-                    <span>Pomodoro</span>
-                </li>
-
-                <li
-                    class="nav-item"
-                    data-section="weather"
-                >
-                    <i class="ri-sun-cloudy-line"></i>
-                    <span>Weather</span>
-                </li>
-
-                <li
-                    class="nav-item"
-                    data-section="quotes"
-                >
-                    <i class="ri-double-quotes-l"></i>
-                    <span>Quotes</span>
-                </li>
-
-            </ul>
-
+            <li class="nav-item" data-section="quotes">
+              <i class="ri-double-quotes-l"></i>
+              <span>Quotes</span>
+            </li>
+          </ul>
         </nav>
+      </aside>
 
-    </aside>
-
-    <!-- ==========================
+      <!-- ==========================
             MAIN CONTENT
     =========================== -->
 
-    <section class="main-content">
-
+      <section class="main-content">
         <!-- ==========================
                 HEADER
         =========================== -->
 
         <header class="top-header">
+          <div class="header-left">
+            <h1 id="greeting">Welcome</h1>
 
-            <div class="header-left">
+            <p id="current-date">Monday, 1 January 2026</p>
+          </div>
 
-                <h1 id="greeting">
+          <div class="header-right">
+            <button id="theme-toggle" class="icon-btn" title="Toggle Theme">
+              <i class="ri-moon-line"></i>
+            </button>
 
-                    Welcome
+            <div class="user-info">
+              <i class="ri-user-3-line"></i>
 
-                </h1>
-
-                <p id="current-date">
-
-                    Monday, 1 January 2026
-
-                </p>
-
+              <span id="user-name"> User </span>
             </div>
 
-            <div class="header-right">
+            <button id="logout-btn" class="logout-btn">
+              <i class="ri-logout-box-r-line"></i>
 
-                <button
-                    id="theme-toggle"
-                    class="icon-btn"
-                    title="Toggle Theme"
-                >
-
-                    <i class="ri-moon-line"></i>
-
-                </button>
-
-                <div class="user-info">
-
-                    <i class="ri-user-3-line"></i>
-
-                    <span id="user-name">
-
-                        User
-
-                    </span>
-
-                </div>
-
-                <button
-                    id="logout-btn"
-                    class="logout-btn"
-                >
-
-                    <i class="ri-logout-box-r-line"></i>
-
-                    Logout
-
-                </button>
-
-            </div>
-
+              Logout
+            </button>
+          </div>
         </header>
 
         <!-- ==========================
               PAGE CONTENT STARTS
         =========================== -->
 
-                <!-- ==========================
+        <!-- ==========================
                 DASHBOARD SECTION
         =========================== -->
 
-        <section
-            id="dashboard-section"
-            class="page-section active-section"
-        >
+        <section id="dashboard-section" class="page-section active-section">
+          <div class="section-heading">
+            <h2>Dashboard Overview</h2>
 
-            <div class="section-heading">
+            <p>Here's a quick overview of your productivity.</p>
+          </div>
 
-                <h2>Dashboard Overview</h2>
-
-                <p>
-                    Here's a quick overview of your productivity.
-                </p>
-
-            </div>
-
-            <!-- ==========================
+          <!-- ==========================
                     STATS CARDS
             =========================== -->
 
-            <div class="stats-grid">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <i class="ri-checkbox-circle-line"></i>
 
-                <div class="stat-card">
+              <h3 id="total-tasks">0</h3>
 
-                    <i class="ri-checkbox-circle-line"></i>
-
-                    <h3 id="total-tasks">
-
-                        0
-
-                    </h3>
-
-                    <p>Total Tasks</p>
-
-                </div>
-
-                <div class="stat-card">
-
-                    <i class="ri-loader-4-line"></i>
-
-                    <h3 id="pending-tasks">
-
-                        0
-
-                    </h3>
-
-                    <p>Pending</p>
-
-                </div>
-
-                <div class="stat-card">
-
-                    <i class="ri-check-double-line"></i>
-
-                    <h3 id="completed-tasks">
-
-                        0
-
-                    </h3>
-
-                    <p>Completed</p>
-
-                </div>
-
-                <div class="stat-card">
-
-                    <i class="ri-focus-3-line"></i>
-
-                    <h3 id="goals-count">
-
-                        0
-
-                    </h3>
-
-                    <p>Goals</p>
-
-                </div>
-
-                <div class="stat-card">
-
-                    <i class="ri-timer-line"></i>
-
-                    <h3 id="focus-time">
-
-                        25 min
-
-                    </h3>
-
-                    <p>Focus Session</p>
-
-                </div>
-
-                <div class="stat-card">
-
-                    <i class="ri-sun-cloudy-line"></i>
-
-                    <h3 id="weather-temp">
-
-                        --
-
-                    </h3>
-
-                    <p>Weather</p>
-
-                </div>
-
+              <p>Total Tasks</p>
             </div>
 
-            <!-- ==========================
+            <div class="stat-card">
+              <i class="ri-loader-4-line"></i>
+
+              <h3 id="pending-tasks">0</h3>
+
+              <p>Pending</p>
+            </div>
+
+            <div class="stat-card">
+              <i class="ri-check-double-line"></i>
+
+              <h3 id="completed-tasks">0</h3>
+
+              <p>Completed</p>
+            </div>
+
+            <div class="stat-card">
+              <i class="ri-focus-3-line"></i>
+
+              <h3 id="goals-count">0</h3>
+
+              <p>Goals</p>
+            </div>
+
+            <div class="stat-card">
+              <i class="ri-timer-line"></i>
+
+              <h3 id="focus-time">25 min</h3>
+
+              <p>Focus Session</p>
+            </div>
+
+            <div class="stat-card">
+              <i class="ri-sun-cloudy-line"></i>
+
+              <h3 id="weather-temp">--</h3>
+
+              <p>Weather</p>
+            </div>
+          </div>
+
+          <!-- ==========================
                     QUICK PANELS
             =========================== -->
 
-            <div class="dashboard-grid">
+          <div class="dashboard-grid">
+            <div class="dashboard-card">
+              <div class="card-header">
+                <h3>Today's Tasks</h3>
+              </div>
 
-                <div class="dashboard-card">
-
-                    <div class="card-header">
-
-                        <h3>Today's Tasks</h3>
-
-                    </div>
-
-                    <div id="dashboard-task-preview">
-
-                        No tasks yet.
-
-                    </div>
-
-                </div>
-
-                <div class="dashboard-card">
-
-                    <div class="card-header">
-
-                        <h3>Today's Planner</h3>
-
-                    </div>
-
-                    <div id="dashboard-planner-preview">
-
-                        Nothing scheduled.
-
-                    </div>
-
-                </div>
-
+              <div id="dashboard-task-preview">No tasks yet.</div>
             </div>
 
+            <div class="dashboard-card">
+              <div class="card-header">
+                <h3>Today's Planner</h3>
+              </div>
+
+              <div id="dashboard-planner-preview">Nothing scheduled.</div>
+            </div>
+          </div>
         </section>
 
         <!-- ==========================
                 TODO SECTION
         =========================== -->
 
-        <section
-            id="todo-section"
-            class="page-section hidden"
-        >
+        <section id="todo-section" class="page-section hidden">
+          <div class="section-heading">
+            <h2>Todo Manager</h2>
 
-            <div class="section-heading">
+            <p>Organize and manage all your daily tasks.</p>
+          </div>
 
-                <h2>Todo Manager</h2>
-
-                <p>
-
-                    Organize and manage all your daily tasks.
-
-                </p>
-
-            </div>
-
-            <div class="module-container">
-
+          <div class="module-container">
             <!-- Toolbar -->
 
             <div class="todo-toolbar">
+              <input
+                type="text"
+                id="task-search"
+                placeholder="Search tasks..."
+                class="search-input"
+              />
 
-                <input
-                    type="text"
-                    id="task-search"
-                    placeholder="Search tasks..."
-                    class="search-input"
-                >
+              <select id="category-filter">
+                <option value="all">All Categories</option>
 
-                <select id="category-filter">
+                <option value="Work">Work</option>
 
-                    <option value="all">
-                        All Categories
-                    </option>
+                <option value="Study">Study</option>
 
-                    <option value="Work">
-                        Work
-                    </option>
+                <option value="Personal">Personal</option>
 
-                    <option value="Study">
-                        Study
-                    </option>
+                <option value="Shopping">Shopping</option>
 
-                    <option value="Personal">
-                        Personal
-                    </option>
+                <option value="Health">Health</option>
+              </select>
 
-                    <option value="Shopping">
-                        Shopping
-                    </option>
+              <select id="status-filter">
+                <option value="all">All Status</option>
 
-                    <option value="Health">
-                        Health
-                    </option>
+                <option value="Pending">Pending</option>
 
-                </select>
+                <option value="In Progress">In Progress</option>
 
-                <select id="status-filter">
+                <option value="Completed">Completed</option>
+              </select>
 
-                    <option value="all">
-                        All Status
-                    </option>
+              <select id="sort-tasks">
+                <option value="newest">Newest First</option>
 
-                    <option value="Pending">
-                        Pending
-                    </option>
+                <option value="oldest">Oldest First</option>
 
-                    <option value="In Progress">
-                        In Progress
-                    </option>
+                <option value="alphabetical">A-Z</option>
+              </select>
 
-                    <option value="Completed">
-                        Completed
-                    </option>
+              <button id="add-task-btn" class="primary-btn">
+                <i class="ri-add-line"></i>
 
-                </select>
-
-                <select id="sort-tasks">
-
-                    <option value="newest">
-                        Newest First
-                    </option>
-
-                    <option value="oldest">
-                        Oldest First
-                    </option>
-
-                    <option value="alphabetical">
-                        A-Z
-                    </option>
-
-                </select>
-
-                <button
-                    id="add-task-btn"
-                    class="primary-btn"
-                >
-
-                    <i class="ri-add-line"></i>
-
-                    Add Task
-
-                </button>
-
+                Add Task
+              </button>
             </div>
 
             <!-- Tasks -->
 
-            <div
-                id="task-list"
-                class="task-list"
-            >
+            <div id="task-list" class="task-list">
+              <div class="empty-state">
+                <i class="ri-inbox-line"></i>
 
-                <div class="empty-state">
+                <h3>No Tasks Yet</h3>
 
-                    <i class="ri-inbox-line"></i>
-
-                    <h3>
-
-                        No Tasks Yet
-
-                    </h3>
-
-                    <p>
-
-                        Click "Add Task" to create your first task.
-
-                    </p>
-
-                </div>
-
+                <p>Click "Add Task" to create your first task.</p>
+              </div>
             </div>
-
-        </div>
-
+          </div>
         </section>
 
         <!-- ==========================
                 PLANNER SECTION
         =========================== -->
 
-        <section
-            id="planner-section"
-            class="page-section hidden"
-        >
+        <section id="planner-section" class="page-section hidden">
+          <div class="planner-container">
+            <div class="planner-header">
+              <button id="prev-month">
+                <i class="ri-arrow-left-s-line"></i>
+              </button>
 
-            <div class="section-heading">
+              <h2 id="current-month">July 2026</h2>
 
-                <h2>Daily Planner</h2>
-
-                <p>
-
-                    Plan your day efficiently.
-
-                </p>
-
+              <button id="next-month">
+                <i class="ri-arrow-right-s-line"></i>
+              </button>
             </div>
 
-            <div class="module-container">
-
-                <p>
-
-                    Planner module will be implemented here.
-
-                </p>
-
+            <div class="calendar-weekdays">
+              <span>Sun</span>
+              <span>Mon</span>
+              <span>Tue</span>
+              <span>Wed</span>
+              <span>Thu</span>
+              <span>Fri</span>
+              <span>Sat</span>
             </div>
 
+            <div id="calendar-grid" class="calendar-grid"></div>
+          </div>
         </section>
 
-                <!-- ==========================
+        <!-- ==========================
                 GOALS SECTION
         =========================== -->
 
-        <section
-            id="goals-section"
-            class="page-section hidden"
-        >
+        <section id="goals-section" class="page-section hidden">
+          <div class="section-heading">
+            <h2>Goals Tracker</h2>
 
-            <div class="section-heading">
+            <p>Track your personal goals.</p>
+          </div>
 
-                <h2>Goals Tracker</h2>
-
-                <p>
-
-                    Track your personal and professional goals.
-
-                </p>
-
+          <div class="module-container">
+            <div class="goals-toolbar">
+              <button id="add-goal-btn" class="primary-btn">
+                <i class="ri-add-line"></i>
+                Add Goal
+              </button>
             </div>
 
-            <div class="module-container">
+            <div id="goals-list" class="goals-list">
+              <div class="empty-state">
+                <i class="ri-focus-3-line"></i>
 
-                <p>
+                <h3>No Goals Yet</h3>
 
-                    Goals module will be implemented here.
-
-                </p>
-
+                <p>Create your first goal.</p>
+              </div>
             </div>
-
+          </div>
         </section>
 
         <!-- ==========================
                 POMODORO SECTION
         =========================== -->
 
-        <section
-            id="pomodoro-section"
-            class="page-section hidden"
-        >
+        <section id="pomodoro-section" class="page-section hidden">
+          <div class="pomodoro-page">
+            <div class="pomodoro-card">
+              <div class="pomodoro-header">
+                <h2>🍅 Pomodoro Timer</h2>
 
-            <div class="section-heading">
+                <p>Stay focused. One session at a time.</p>
+              </div>
 
-                <h2>Pomodoro Timer</h2>
+              <!-- Timer -->
 
-                <p>
+              <div class="timer-wrapper">
+                <svg class="progress-ring" width="430" height="430">
+                  <circle
+                    class="progress-bg"
+                    cx="215"
+                    cy="215"
+                    r="180"
+                  ></circle>
 
-                    Stay focused using the Pomodoro technique.
+                  <circle
+                    id="progress-circle"
+                    class="progress-bar"
+                    cx="215"
+                    cy="215"
+                    r="180"
+                  ></circle>
+                </svg>
 
-                </p>
+                <div class="timer-content">
+                  <div id="timer-display">25:00</div>
 
+                  <span id="timer-mode"> WORK SESSION </span>
+                </div>
+              </div>
+
+              <!-- Modes -->
+
+              <div class="mode-selector">
+                <button id="work-mode" class="mode-btn active" data-mode="work">
+                  Work
+                </button>
+
+                <button id="short-break" class="mode-btn" data-mode="short">
+                  Short Break
+                </button>
+
+                <button id="long-break" class="mode-btn" data-mode="long">
+                  Long Break
+                </button>
+              </div>
+
+              <!-- Controls -->
+
+              <div class="timer-buttons">
+                <button id="start-timer">
+                  <i class="ri-play-fill"></i>
+                </button>
+
+                <button id="pause-timer">
+                  <i class="ri-pause-fill"></i>
+                </button>
+
+                <button id="reset-timer">
+                  <i class="ri-restart-line"></i>
+                </button>
+              </div>
+
+              <!-- Statistics -->
+
+              <div class="pomodoro-stats">
+                <div class="pomodoro-stat">
+                  <h3 id="today-sessions">0</h3>
+
+                  <span> Sessions </span>
+                </div>
+
+                <div class="pomodoro-stat">
+                  <h3 id="today-focus">0 min</h3>
+
+                  <span> Focus Time </span>
+                </div>
+
+                <div class="pomodoro-stat">
+                  <h3 id="today-streak">🔥 0</h3>
+
+                  <span> Streak </span>
+                </div>
+
+                <div class="pomodoro-stat">
+                  <h3 id="today-complete">0%</h3>
+
+                  <span> Completed </span>
+                </div>
+              </div>
             </div>
-
-            <div class="module-container">
-
-                <p>
-
-                    Pomodoro timer will be implemented here.
-
-                </p>
-
-            </div>
-
+          </div>
         </section>
 
         <!-- ==========================
                 WEATHER SECTION
         =========================== -->
 
-        <section
-            id="weather-section"
-            class="page-section hidden"
-        >
+        <section id="weather-section" class="page-section hidden">
+          <div class="section-heading">
+            <h2>Weather</h2>
 
-            <div class="section-heading">
+            <p>Check today's weather before planning your day.</p>
+          </div>
 
-                <h2>Weather</h2>
-
-                <p>
-
-                    Check today's weather before planning your day.
-
-                </p>
-
-            </div>
-
-            <div class="module-container">
-
-                <p>
-
-                    Weather widget will be implemented here.
-
-                </p>
-
-            </div>
-
+          <div class="module-container">
+            <p>Weather widget will be implemented here.</p>
+          </div>
         </section>
 
         <!-- ==========================
                 QUOTES SECTION
         =========================== -->
 
-        <section
-            id="quotes-section"
-            class="page-section hidden"
-        >
+        <section id="quotes-section" class="page-section hidden">
+          <div class="section-heading">
+            <h2>Daily Motivation</h2>
 
-            <div class="section-heading">
+            <p>Stay inspired every day.</p>
+          </div>
 
-                <h2>Daily Motivation</h2>
-
-                <p>
-
-                    Stay inspired every day.
-
-                </p>
-
-            </div>
-
-            <div class="module-container">
-
-                <p>
-
-                    Daily quotes will appear here.
-
-                </p>
-
-            </div>
-
+          <div class="module-container">
+            <p>Daily quotes will appear here.</p>
+          </div>
         </section>
-
-    </section>
-
+      </section>
     </main>
 
     <!-- ==========================
@@ -650,167 +480,212 @@
     ========================== -->
 
     <div id="task-modal" class="modal-overlay hidden">
+      <div class="modal">
+        <div class="modal-header">
+          <h2 id="modal-title">Add New Task</h2>
 
-        <div class="modal">
-
-            <div class="modal-header">
-
-                <h2 id="modal-title">
-                    Add New Task
-                </h2>
-
-                <button
-                    id="close-modal"
-                    class="modal-close"
-                    type="button"
-                >
-                    <i class="ri-close-line"></i>
-                </button>
-
-            </div>
-
-            <form id="task-form">
-
-                <input
-                    type="hidden"
-                    id="task-id"
-                >
-
-                <div class="form-group">
-
-                    <label for="task-title">
-                        Task Title
-                    </label>
-
-                    <input
-                        type="text"
-                        id="task-title"
-                        class="form-input"
-                        placeholder="Enter task title"
-                        required
-                    >
-
-                </div>
-
-                <div class="form-group">
-
-                    <label for="task-description">
-                        Description
-                    </label>
-
-                    <textarea
-                        id="task-description"
-                        class="form-input"
-                        rows="4"
-                        placeholder="Write something..."
-                    ></textarea>
-
-                </div>
-
-                <div class="form-row">
-
-                    <div class="form-group">
-
-                        <label for="task-category">
-                            Category
-                        </label>
-
-                        <select id="task-category">
-
-                            <option>Work</option>
-                            <option>Study</option>
-                            <option>Personal</option>
-                            <option>Shopping</option>
-                            <option>Health</option>
-
-                        </select>
-
-                    </div>
-
-                    <div class="form-group">
-
-                        <label for="task-priority">
-                            Priority
-                        </label>
-
-                        <select id="task-priority">
-
-                            <option>Low</option>
-                            <option selected>Medium</option>
-                            <option>High</option>
-
-                        </select>
-
-                    </div>
-
-                </div>
-
-                <div class="form-row">
-
-                    <div class="form-group">
-
-                        <label for="task-date">
-                            Due Date
-                        </label>
-
-                        <input
-                            type="date"
-                            id="task-date"
-                        >
-
-                    </div>
-
-                    <div class="form-group">
-
-                        <label for="task-status">
-                            Status
-                        </label>
-
-                        <select id="task-status">
-
-                            <option selected>
-                                Pending
-                            </option>
-
-                            <option>
-                                In Progress
-                            </option>
-
-                            <option>
-                                Completed
-                            </option>
-
-                        </select>
-
-                    </div>
-
-                </div>
-
-                <div class="modal-actions">
-
-                    <button
-                        type="button"
-                        id="cancel-task"
-                        class="secondary-btn"
-                    >
-                        Cancel
-                    </button>
-
-                    <button
-                        type="submit"
-                        class="primary-btn"
-                    >
-                        Save Task
-                    </button>
-
-                </div>
-
-            </form>
-
+          <button id="close-modal" class="modal-close" type="button">
+            <i class="ri-close-line"></i>
+          </button>
         </div>
 
+        <form id="task-form">
+          <input type="hidden" id="task-id" />
+
+          <div class="form-group">
+            <label for="task-title"> Task Title </label>
+
+            <input
+              type="text"
+              id="task-title"
+              class="form-input"
+              placeholder="Enter task title"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="task-description"> Description </label>
+
+            <textarea
+              id="task-description"
+              class="form-input"
+              rows="4"
+              placeholder="Write something..."
+            ></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="task-category"> Category </label>
+
+              <select id="task-category">
+                <option>Work</option>
+                <option>Study</option>
+                <option>Personal</option>
+                <option>Shopping</option>
+                <option>Health</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="task-priority"> Priority </label>
+
+              <select id="task-priority">
+                <option>Low</option>
+                <option selected>Medium</option>
+                <option>High</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="task-date"> Due Date </label>
+
+              <input type="date" id="task-date" />
+            </div>
+
+            <div class="form-group">
+              <label for="task-status"> Status </label>
+
+              <select id="task-status">
+                <option selected>Pending</option>
+
+                <option>In Progress</option>
+
+                <option>Completed</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" id="cancel-task" class="secondary-btn">
+              Cancel
+            </button>
+
+            <button type="submit" class="primary-btn">Save Task</button>
+          </div>
+        </form>
+      </div>
     </div>
 
+    <!-- ==========================
+        PLANNER MODAL
+    ========================== -->
+
+    <div id="planner-modal" class="modal-overlay hidden">
+      <div class="modal">
+        <div class="modal-header">
+          <h2 id="planner-modal-title">Add Event</h2>
+
+          <button id="close-planner-modal" class="modal-close" type="button">
+            <i class="ri-close-line"></i>
+          </button>
+        </div>
+
+        <form id="planner-form">
+          <input type="hidden" id="event-id" />
+
+          <input type="hidden" id="selected-date" />
+
+          <div class="form-group">
+            <label>Event Title</label>
+
+            <input
+              type="text"
+              id="event-title"
+              class="form-input"
+              placeholder="Team Meeting"
+            />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Category</label>
+
+              <select id="event-category">
+                <option>Work</option>
+                <option>Study</option>
+                <option>Personal</option>
+                <option>Meeting</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Time</label>
+
+              <input type="time" id="event-time" />
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" id="delete-event" class="danger-btn hidden">
+              Delete
+            </button>
+
+            <button type="button" id="cancel-event" class="secondary-btn">
+              Cancel
+            </button>
+
+            <button type="submit" class="primary-btn">Save Event</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="goal-modal" class="modal-overlay hidden">
+      <div class="modal">
+        <div class="modal-header">
+          <h2 id="goal-modal-title">Add Goal</h2>
+
+          <button id="close-goal-modal" class="modal-close" type="button">
+            <i class="ri-close-line"></i>
+          </button>
+        </div>
+
+        <form id="goal-form">
+          <input type="hidden" id="goal-id" />
+
+          <div class="form-group">
+            <label> Goal Title </label>
+
+            <input id="goal-title" class="form-input" type="text" />
+          </div>
+
+          <div class="form-group">
+            <label> Target </label>
+
+            <input id="goal-target" class="form-input" type="number" min="1" />
+          </div>
+
+          <div class="form-group">
+            <label> Progress </label>
+
+            <input
+              id="goal-progress"
+              class="form-input"
+              type="number"
+              value="0"
+              min="0"
+            />
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" id="delete-goal" class="danger-btn hidden">
+              Delete
+            </button>
+
+            <button type="button" id="cancel-goal" class="secondary-btn">
+              Cancel
+            </button>
+
+            <button class="primary-btn" type="submit">Save Goal</button>
+          </div>
+        </form>
+      </div>
+    </div>
     <div id="toast-container" class="toast-container"></div>
 
     <!-- ==========================
@@ -829,6 +704,5 @@
     <script src="./js/weather.js"></script>
     <script src="./js/quotes.js"></script>
     <script src="./js/app.js"></script>
-
-    </body>
-    </html>
+  </body>
+</html>
