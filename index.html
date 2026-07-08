@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="./css/planner.css" />
     <link rel="stylesheet" href="./css/goals.css" />
     <link rel="stylesheet" href="./css/pomodoro.css" />
+    <link rel="stylesheet" href="./css/quotes.css" />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
@@ -458,18 +459,59 @@
         </section>
 
         <!-- ==========================
-                QUOTES SECTION
-        =========================== -->
+        QUOTES SECTION
+========================== -->
 
         <section id="quotes-section" class="page-section hidden">
           <div class="section-heading">
-            <h2>Daily Motivation</h2>
+            <h2>Daily Inspiration</h2>
 
-            <p>Stay inspired every day.</p>
+            <p>Stay motivated with a fresh quote every day.</p>
           </div>
 
-          <div class="module-container">
-            <p>Daily quotes will appear here.</p>
+          <div class="quotes-container">
+            <div class="quote-card">
+              <div id="quote-loader" class="quote-loader hidden">
+                Loading Quote...
+              </div>
+
+              <i class="ri-double-quotes-l quote-icon"></i>
+
+              <blockquote id="quote-text">
+                Click Refresh to load today's inspiration.
+              </blockquote>
+
+              <p id="quote-author">— Unknown</p>
+
+              <div class="quote-actions">
+                <button id="refresh-quote" class="primary-btn">
+                  <i class="ri-refresh-line"></i>
+                  New Quote
+                </button>
+
+                <button id="copy-quote" class="secondary-btn">
+                  <i class="ri-file-copy-line"></i>
+                  Copy
+                </button>
+
+                <button id="favorite-quote" class="secondary-btn">
+                  <i class="ri-heart-line"></i>
+                  Favorite
+                </button>
+              </div>
+
+              <div class="favorites-card">
+                <h3>
+                  <i class="ri-heart-fill"></i>
+
+                  Favorite Quotes
+                </h3>
+
+                <div id="favorite-quotes-list">
+                  <p>No favorite quotes yet.</p>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
       </section>

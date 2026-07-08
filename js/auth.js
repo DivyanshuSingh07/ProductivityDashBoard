@@ -231,6 +231,8 @@ registerForm.addEventListener("submit", (e) => {
 
     goals: [],
 
+    favoriteQuotes: [],
+
     pomodoro: {
       sessions: 0,
 
