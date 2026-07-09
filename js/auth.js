@@ -360,7 +360,7 @@ loginForm.addEventListener("submit", (e) => {
   showMessage(`Welcome back, ${user.fullName}!`, "success");
 
   setTimeout(() => {
-    window.location.href = "../index.html";
+    window.location.href = "./";
   }, 800);
 });
 
@@ -376,7 +376,7 @@ if (currentUser) {
   const loggedInUser = users.find((user) => user.id === currentUser.id);
 
   if (loggedInUser) {
-    window.location.href = "../index.html";
+    window.location.href = "./";
   } else {
     localStorage.removeItem(CURRENT_USER_KEY);
   }
