@@ -215,3 +215,132 @@
     background:#b91c1c;
 
 }
+
+
+
+
+
+
+.day-planner{
+
+    margin-top:30px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:20px;
+
+}
+
+.day-planner-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+.timeline-container{
+
+    display:flex;
+
+    flex-direction:column;
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+}
+
+
+.time-slot{
+
+    display:grid;
+
+    grid-template-columns:90px 1fr;
+
+    min-height:70px;
+
+    border-bottom:1px solid var(--border-color);
+
+}
+
+.slot-time{
+
+    padding:18px;
+
+    font-weight:600;
+
+    border-right:1px solid var(--border-color);
+
+}
+
+.slot-content{
+
+    padding:15px;
+
+}
+.planner-event{
+
+    background:var(--primary-color);
+
+    color:white;
+
+    border-radius:12px;
+
+    padding:12px 14px;
+
+    cursor:pointer;
+
+    margin-bottom:10px;
+
+    transition:.25s;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:6px;
+
+}
+
+.planner-event:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 10px 20px rgba(0,0,0,.18);
+
+}
+
+.planner-event h4{
+
+    font-size:1rem;
+
+    font-weight:700;
+
+}
+
+.planner-event-time{
+
+    font-size:.8rem;
+
+    opacity:.9;
+
+}
+
+.planner-category{
+
+    align-self:flex-start;
+
+    background:rgba(255,255,255,.2);
+
+    padding:4px 10px;
+
+    border-radius:30px;
+
+    font-size:.75rem;
+
+}

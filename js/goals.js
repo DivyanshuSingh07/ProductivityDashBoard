@@ -1,492 +1,803 @@
-/* ==========================
-        INITIALIZE GOALS
-========================== */
-
 function initializeGoals() {
+  resetDailyData();
 
-    const addGoalBtn = document.getElementById("add-goal-btn");
+  renderGreeting();
 
-    const goalForm = document.getElementById("goal-form");
+  renderOverallProgress();
 
-    const goalsList = document.getElementById("goals-list");
+  initializeDailyGoals();
 
-    const deleteBtn = document.getElementById("delete-goal");
+  initializeHabits();
 
-    const closeBtn = document.getElementById("close-goal-modal");
-
-const cancelBtn = document.getElementById("cancel-goal");
-
-const overlay = document.getElementById("goal-modal");
-
-if (closeBtn) {
-
-    closeBtn.addEventListener(
-        "click",
-        closeGoalModal
-    );
-
+  initializeCategories();
 }
 
-if (cancelBtn) {
-
-    cancelBtn.addEventListener(
-        "click",
-        closeGoalModal
-    );
-
+function getToday() {
+  return new Date().toISOString().split("T")[0];
 }
 
-if (overlay) {
+function getYesterday() {
+  const yesterday = new Date();
 
-    overlay.addEventListener("click", (event) => {
+  yesterday.setDate(yesterday.getDate() - 1);
 
-        if (event.target === overlay) {
+  return yesterday.toISOString().split("T")[0];
+}
+function resetDailyData() {
+  const user = getCurrentUser();
 
-            closeGoalModal();
+  if (!user) return;
 
-        }
+  const today = getToday();
 
-    });
+  if (user.lastReset === today) {
+    return;
+  }
 
+  resetDailyGoals(user);
+
+  resetHabits(user);
+
+  user.lastReset = today;
+
+  updateCurrentUser(user);
 }
 
-    if (addGoalBtn) {
+function resetDailyGoals(user) {
+  user.dailyGoals.forEach((goal) => {
+    goal.completed = false;
 
-        addGoalBtn.addEventListener(
-            "click",
-            openGoalModal
-        );
-
-    }
-
-    if (goalForm) {
-
-        goalForm.addEventListener(
-            "submit",
-            saveGoal
-        );
-
-    }
-
-    if (goalsList) {
-
-        goalsList.addEventListener(
-            "click",
-            handleGoalActions
-        );
-
-    }
-
-    if (deleteBtn) {
-
-        deleteBtn.addEventListener(
-            "click",
-            deleteGoal
-        );
-
-    }
-
-    renderGoals();
-
+    goal.createdAt = getToday();
+  });
 }
 
-/* ==========================
-        OPEN GOAL MODAL
-========================== */
-
-function openGoalModal() {
-
-    document
-        .getElementById("goal-modal")
-        .classList.remove("hidden");
-
+function resetHabits(user) {
+  user.habits.forEach((habit) => {
+    habit.completedToday = false;
+  });
 }
 
-/* ==========================
-        CLOSE GOAL MODAL
-========================== */
+function renderGreeting() {
+  const hour = new Date().getHours();
 
-function closeGoalModal() {
+  let greeting = "";
 
-    document
-        .getElementById("goal-modal")
-        .classList.add("hidden");
+  if (hour < 12) {
+    greeting = "Good Morning";
+  } else if (hour < 17) {
+    greeting = "Good Afternoon";
+  } else {
+    greeting = "Good Evening";
+  }
 
-    document
-        .getElementById("goal-form")
-        .reset();
+  const user = getCurrentUser();
 
-    document
-        .getElementById("goal-id")
-        .value = "";
-
-    document
-        .getElementById("goal-modal-title")
-        .textContent = "Add Goal";
-
-    document
-        .getElementById("delete-goal")
-        .classList.add("hidden");
-
+  document.getElementById("goal-greeting").textContent =
+    `${greeting}, ${user.name}`;
 }
 
+function renderOverallProgress() {
+  const user = getCurrentUser();
 
-/* ==========================
-        SAVE GOAL
-========================== */
+  if (!user) return;
 
-function saveGoal(event) {
+  const total = user.dailyGoals.length;
 
-    event.preventDefault();
+  const completed = user.dailyGoals.filter((goal) => goal.completed).length;
 
-    const user = getCurrentUser();
+  const progress = total === 0 ? 0 : Math.round((completed / total) * 100);
 
-    if (!user) return;
+  document.getElementById("overall-progress-fill").style.width = `${progress}%`;
 
-    const title = document
-        .getElementById("goal-title")
-        .value
-        .trim();
-
-    if (title === "") {
-
-        document
-            .getElementById("goal-title")
-            .focus();
-
-        return;
-
-    }
-
-    const goal = {
-
-        id: generateId(),
-
-        title: title,
-
-        target: Number(
-
-            document.getElementById("goal-target").value
-
-        ),
-
-        progress: Number(
-
-            document.getElementById("goal-progress").value
-
-        ),
-
-        completed: false
-
-    };
-
-    const goalId =
-
-        document.getElementById("goal-id").value;
-
-    if (goalId) {
-
-        const index = user.goals.findIndex(
-
-            item => item.id == goalId
-
-        );
-
-        goal.id = Number(goalId);
-
-        goal.completed =
-
-            goal.progress >= goal.target;
-
-        user.goals[index] = goal;
-
-    }
-
-    else {
-
-        goal.completed =
-
-            goal.progress >= goal.target;
-
-        user.goals.push(goal);
-
-    }
-
-    updateCurrentUser(user);
-
-    closeGoalModal();
-
-    renderGoals();
-
+  document.getElementById("overall-progress-text").textContent =
+    `${completed}/${total} Goals Completed`;
 }
 
+function initializeDailyGoals() {
+  const addBtn = document.getElementById("add-daily-goal");
 
-/* ==========================
-        RENDER GOALS
-========================== */
+  const closeBtn = document.getElementById("close-daily-modal");
 
-function renderGoals() {
+  const cancelBtn = document.getElementById("cancel-daily-goal");
 
-    const user = getCurrentUser();
+  const form = document.getElementById("daily-goal-form");
 
-    if (!user) return;
+  const list = document.getElementById("daily-goals-list");
 
-    const goalsList =
+  addBtn.addEventListener("click", openDailyGoalModal);
 
-        document.getElementById("goals-list");
+  closeBtn.addEventListener("click", closeDailyGoalModal);
 
-    goalsList.innerHTML = "";
+  cancelBtn.addEventListener("click", closeDailyGoalModal);
 
-    if (user.goals.length === 0) {
+  form.addEventListener("submit", saveDailyGoal);
 
-        goalsList.innerHTML = `
+  list.addEventListener("click", handleDailyGoalActions);
+
+  const overlay = document.getElementById("daily-goal-modal");
+
+  overlay.addEventListener("click", (event) => {
+    if (event.target === overlay) {
+      closeDailyGoalModal();
+    }
+  });
+
+  renderDailyGoals();
+}
+
+function openDailyGoalModal() {
+  document.getElementById("daily-goal-modal").classList.remove("hidden");
+}
+
+function closeDailyGoalModal() {
+  document.getElementById("daily-goal-modal").classList.add("hidden");
+
+  document.getElementById("daily-goal-form").reset();
+}
+
+function saveDailyGoal(event) {
+  event.preventDefault();
+
+  const user = getCurrentUser();
+
+  if (!user) return;
+
+  const title = document.getElementById("daily-goal-title").value.trim();
+
+  if (title === "") return;
+
+  user.dailyGoals.push({
+    id: generateId(),
+
+    title,
+
+    category: document.getElementById("daily-goal-category").value,
+
+    priority: document.getElementById("daily-goal-priority").value,
+
+    notes: document.getElementById("daily-goal-notes").value.trim(),
+
+    completed: false,
+
+    createdAt: getToday(),
+  });
+
+  updateCurrentUser(user);
+
+  closeDailyGoalModal();
+
+  renderDailyGoals();
+
+  renderOverallProgress();
+}
+
+function renderDailyGoals() {
+  const user = getCurrentUser();
+
+  if (!user) return;
+
+  const container = document.getElementById("daily-goals-list");
+
+  container.innerHTML = "";
+
+  if (user.dailyGoals.length === 0) {
+    container.innerHTML = `
 
             <div class="empty-state">
 
-                <i class="ri-focus-3-line"></i>
+                <i class="ri-checkbox-circle-line"></i>
 
-                <h3>No Goals Yet</h3>
-
-                <p>Create your first goal.</p>
+                <p>No Daily Goals</p>
 
             </div>
 
         `;
 
-        updateGoalStats();
+    return;
+  }
+
+  user.dailyGoals.forEach((goal) => {
+    const item = document.createElement("div");
+
+    item.className = "daily-goal";
+
+    item.innerHTML = `
+
+<div class="daily-left">
+
+    <input
+
+        type="checkbox"
+
+        class="daily-checkbox"
+
+        data-id="${goal.id}"
+
+        ${goal.completed ? "checked" : ""}
+
+    >
+
+    <div class="daily-info">
+
+        <h4 class="${goal.completed ? "daily-completed" : ""}">
+
+            ${goal.title}
+
+        </h4>
+
+        <div class="daily-meta">
+
+            <span class="daily-category">
+
+                ${goal.category}
+
+            </span>
+
+            <span class="daily-priority">
+
+                ${goal.priority}
+
+            </span>
+
+        </div>
+
+        ${goal.notes ? `<p class="daily-notes">${goal.notes}</p>` : ""}
+
+    </div>
+
+</div>
+
+<button
+
+    class="delete-daily-goal"
+
+    data-id="${goal.id}"
+
+>
+
+    <i class="ri-delete-bin-line"></i>
+
+</button>
+
+`;
+
+    container.appendChild(item);
+  });
+}
+
+function handleDailyGoalActions(event) {
+  const user = getCurrentUser();
+
+  if (!user) return;
+
+  if (event.target.classList.contains("daily-checkbox")) {
+    const id = Number(event.target.dataset.id);
+
+    const goal = user.dailyGoals.find((goal) => goal.id === id);
+
+    goal.completed = event.target.checked;
+
+    updateCurrentUser(user);
+
+    renderDailyGoals();
+
+    renderOverallProgress();
+  }
+
+  const deleteBtn = event.target.closest(".delete-daily-goal");
+
+  if (deleteBtn) {
+    const id = Number(deleteBtn.dataset.id);
+
+    user.dailyGoals = user.dailyGoals.filter((goal) => goal.id !== id);
+
+    updateCurrentUser(user);
+
+    renderDailyGoals();
+
+    renderOverallProgress();
+  }
+}
+
+function getCategoryClass(category) {
+  switch (category) {
+    case "Health":
+      return "health";
+
+    case "Learning":
+      return "learning";
+
+    case "Career":
+      return "career";
+
+    case "Personal":
+      return "personal";
+
+    case "Finance":
+      return "finance";
+
+    default:
+      return "";
+  }
+}
+
+/* ==========================
+        INITIALIZE HABITS
+========================== */
+
+function initializeHabits() {
+  const addBtn = document.getElementById("add-habit-btn");
+
+  const closeBtn = document.getElementById("close-habit-modal");
+
+  const cancelBtn = document.getElementById("cancel-habit");
+
+  const form = document.getElementById("habit-form");
+
+  const list = document.getElementById("habits-list");
+
+  if (addBtn) {
+    addBtn.addEventListener("click", openHabitModal);
+  }
+
+  if (closeBtn) {
+    closeBtn.addEventListener("click", closeHabitModal);
+  }
+
+  if (cancelBtn) {
+    cancelBtn.addEventListener("click", closeHabitModal);
+  }
+
+  if (form) {
+    form.addEventListener("submit", saveHabit);
+  }
+
+  if (list) {
+    list.addEventListener("click", handleHabitActions);
+  }
+
+  renderHabits();
+}
+
+function openHabitModal() {
+  document.getElementById("habit-modal").classList.remove("hidden");
+}
+
+function closeHabitModal() {
+  document.getElementById("habit-modal").classList.add("hidden");
+
+  document.getElementById("habit-form").reset();
+}
+
+function saveHabit(event) {
+  event.preventDefault();
+
+  const user = getCurrentUser();
+
+  if (!user) return;
+
+  const title = document.getElementById("habit-title").value.trim();
+
+  if (title === "") return;
+
+  user.habits.push({
+    id: generateId(),
+
+    title,
+
+    category: document.getElementById("habit-category").value,
+
+    streak: 0,
+
+    longestStreak: 0,
+
+    completedToday: false,
+
+    lastCompleted: null,
+  });
+
+  updateCurrentUser(user);
+
+  closeHabitModal();
+
+  renderHabits();
+}
+
+function renderHabits() {
+  const user = getCurrentUser();
+
+  if (!user) return;
+
+  const container = document.getElementById("habits-list");
+
+  container.innerHTML = "";
+
+  if (user.habits.length === 0) {
+    container.innerHTML = `
+
+            <div class="empty-state">
+
+                <i class="ri-fire-line"></i>
+
+                <p>No Habits Yet</p>
+
+            </div>
+
+        `;
+
+    return;
+  }
+
+  user.habits.forEach((habit) => {
+    const card = document.createElement("div");
+
+    card.className = "habit-card";
+
+    card.innerHTML = `
+
+            <div class="habit-header">
+
+                <div>
+
+                    <h4>${habit.title}</h4>
+
+                    <span>${habit.category}</span>
+
+                </div>
+
+                <div class="habit-streak">
+
+                    🔥 ${habit.streak} Day Streak
+
+                </div>
+
+                <div class="habit-longest">
+
+                    Best: ${habit.longestStreak}
+
+                </div>
+
+            </div>
+
+            <button
+
+                class="habit-complete-btn"
+
+                data-id="${habit.id}"
+
+            >
+
+                ${habit.completedToday ? "Completed Today" : "Mark Complete"}
+
+            </button>
+
+        `;
+
+    container.appendChild(card);
+  });
+}
+
+function handleHabitActions(event) {
+  const button = event.target.closest(".habit-complete-btn");
+
+  if (!button) return;
+
+  const user = getCurrentUser();
+
+  if (!user) return;
+
+  const id = Number(button.dataset.id);
+
+  const habit = user.habits.find((item) => item.id === id);
+
+  if (!habit) return;
+
+  if (habit.completedToday) return;
+
+  completeHabit(habit);
+
+  updateCurrentUser(user);
+
+  renderHabits();
+}
+
+function completeHabit(habit) {
+  const today = getToday();
+
+  const yesterday = getYesterday();
+
+  if (habit.completedToday) {
+    return;
+  }
+
+  if (habit.lastCompleted === yesterday) {
+    habit.streak++;
+  } else if (habit.lastCompleted === today) {
+    return;
+  } else {
+    habit.streak = 1;
+  }
+
+  habit.completedToday = true;
+
+  habit.lastCompleted = today;
+
+  if (habit.streak > habit.longestStreak) {
+    habit.longestStreak = habit.streak;
+  }
+}
+
+
+/* ==========================
+        INITIALIZE CATEGORIES
+========================== */
+
+function initializeCategories(){
+
+    renderCategories();
+
+}
+
+function renderCategories(){
+
+    const user = getCurrentUser();
+
+    if(!user) return;
+
+    const container =
+
+        document.getElementById(
+
+            "life-categories"
+
+        );
+
+    container.innerHTML="";
+
+    if(user.categories.length===0){
+
+        container.innerHTML=`
+
+            <div class="empty-state">
+
+                <i class="ri-folder-open-line"></i>
+
+                <p>No Categories Yet</p>
+
+            </div>
+
+        `;
 
         return;
 
     }
 
-    user.goals.forEach(goal => {
+    user.categories.forEach(category=>{
 
-        goalsList.appendChild(
+        container.appendChild(
 
-            createGoalCard(goal)
+            createCategoryCard(category)
 
         );
 
     });
 
-    updateGoalStats();
-
 }
 
+function getCategoryProgress(category){
 
-/* ==========================
-        CREATE GOAL CARD
-========================== */
+    const total = category.goals.length;
 
-function createGoalCard(goal) {
+    if(total===0){
 
-    const card = document.createElement("div");
+        return 0;
 
-    card.className = "goal-card";
+    }
 
-    const percentage = Math.min(
+    const completed =
 
-        (goal.progress / goal.target) * 100,
+        category.goals.filter(
 
-        100
+            goal=>goal.completed
+
+        ).length;
+
+    return Math.round(
+
+        completed/total*100
 
     );
 
-    card.innerHTML = `
+}
 
-        <h3>${goal.title}</h3>
+function createCategoryCard(category){
 
-        <p>
+    const progress =
+        getCategoryProgress(category);
 
-            ${goal.progress} / ${goal.target}
+    const card =
+        document.createElement("div");
 
-        </p>
+    card.className="category-card";
 
-        <div class="goal-progress">
+    card.innerHTML=`
+
+        <div
+            class="category-header"
+            data-id="${category.id}"
+        >
+
+            <div>
+
+                <h3>${category.name}</h3>
+
+                <small>
+
+                    ${progress}% Complete
+
+                </small>
+
+            </div>
+
+            <i class="ri-arrow-down-s-line"></i>
+
+        </div>
+
+        <div class="category-progress">
 
             <div
-                class="goal-progress-fill"
-                style="width:${percentage}%"
+
+                class="category-progress-fill"
+
+                style="width:${progress}%"
+
             ></div>
 
         </div>
 
-        <div class="goal-actions">
+        <div
 
-            <button
-                class="edit-goal-btn"
-                data-id="${goal.id}"
-            >
+            class="category-body
+            ${category.expanded ? "" : "hidden"}"
 
-                Edit
-
-            </button>
-
-            <button
-                class="progress-goal-btn"
-                data-id="${goal.id}"
-            >
-
-                +1
-
-            </button>
+        >
 
         </div>
 
     `;
+
+    const body =
+        card.querySelector(".category-body");
+
+    category.goals.forEach(goal=>{
+
+        body.appendChild(
+
+            createCategoryGoal(goal)
+
+        );
+
+    });
+
+    body.insertAdjacentHTML(
+
+        "beforeend",
+
+        `
+
+        <button
+
+            class="add-category-goal"
+
+            data-id="${category.id}"
+
+        >
+
+            <i class="ri-add-line"></i>
+
+            Add Goal
+
+        </button>
+
+        `
+
+    );
 
     return card;
 
 }
 
 
-/* ==========================
-        GOAL ACTIONS
-========================== */
+function createCategoryGoal(goal){
 
-function handleGoalActions(event) {
+    const row =
+        document.createElement("div");
 
-    const button = event.target.closest("button");
+    row.className="category-goal";
 
-    if (!button) return;
+    row.innerHTML=`
 
-    const goalId = Number(button.dataset.id);
+        <label>
 
-    if (button.classList.contains("edit-goal-btn")) {
+            <input
 
-        editGoal(goalId);
+                type="checkbox"
 
-    }
+                class="category-checkbox"
 
-    else if (button.classList.contains("progress-goal-btn")) {
+                data-id="${goal.id}"
 
-        updateGoalProgress(goalId);
+                ${goal.completed?"checked":""}
+
+            >
+
+            ${goal.title}
+
+        </label>
+
+    `;
+
+    return row;
+
+}
+
+function initializeCategories(){
+
+    const container =
+        document.getElementById(
+
+            "life-categories"
+
+        );
+
+    container.addEventListener(
+
+        "click",
+
+        handleCategoryActions
+
+    );
+
+    renderCategories();
+
+}
+
+function handleCategoryActions(event){
+
+    const header =
+        event.target.closest(".category-header");
+
+    if(header){
+
+        toggleCategory(
+
+            Number(header.dataset.id)
+
+        );
+
+        return;
 
     }
 
 }
 
+function toggleCategory(categoryId){
 
-/* ==========================
-        EDIT GOAL
-========================== */
+    const user =
+        getCurrentUser();
 
-function editGoal(goalId) {
+    const category =
+        user.categories.find(
 
-    const user = getCurrentUser();
+            item=>item.id===categoryId
 
-    if (!user) return;
+        );
 
-    const goal = user.goals.find(
-
-        goal => goal.id === goalId
-
-    );
-
-    if (!goal) return;
-
-    document.getElementById("goal-id").value = goal.id;
-
-    document.getElementById("goal-title").value = goal.title;
-
-    document.getElementById("goal-target").value = goal.target;
-
-    document.getElementById("goal-progress").value = goal.progress;
-
-    document.getElementById("goal-modal-title").textContent = "Edit Goal";
-
-    document
-
-        .getElementById("delete-goal")
-
-        .classList.remove("hidden");
-
-    openGoalModal();
-
-}
-
-/* ==========================
-        DELETE GOAL
-========================== */
-
-function deleteGoal() {
-
-    const user = getCurrentUser();
-
-    if (!user) return;
-
-    const goalId = Number(
-
-        document.getElementById("goal-id").value
-
-    );
-
-    user.goals = user.goals.filter(
-
-        goal => goal.id !== goalId
-
-    );
+    category.expanded =
+        !category.expanded;
 
     updateCurrentUser(user);
 
-    closeGoalModal();
-
-    renderGoals();
-
-}
-
-/* ==========================
-        UPDATE PROGRESS
-========================== */
-
-function updateGoalProgress(goalId) {
-
-    const user = getCurrentUser();
-
-    if (!user) return;
-
-    const goal = user.goals.find(
-
-        goal => goal.id === goalId
-
-    );
-
-    if (!goal) return;
-
-    if (goal.progress < goal.target) {
-
-        goal.progress++;
-
-    }
-
-    if (goal.progress >= goal.target) {
-
-        goal.completed = true;
-
-    }
-
-    updateCurrentUser(user);
-
-    renderGoals();
-
-}
-
-/* ==========================
-        GOAL STATS
-========================== */
-
-function updateGoalStats() {
-
-    const user = getCurrentUser();
-
-    if (!user) return;
-
-    const goalsCount = document.getElementById("goals-count");
-
-    if (goalsCount) {
-
-        goalsCount.textContent = user.goals.length;
-
-    }
+    renderCategories();
 
 }

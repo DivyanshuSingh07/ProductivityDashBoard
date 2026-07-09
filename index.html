@@ -174,7 +174,7 @@
               <i class="ri-sun-cloudy-line"></i>
 
               <!-- Dashboard -->
-                <h3 id="dashboard-weather-temp">--</h3>
+              <h3 id="dashboard-weather-temp">--</h3>
 
               <p>Weather</p>
             </div>
@@ -308,35 +308,132 @@
 
             <div id="calendar-grid" class="calendar-grid"></div>
           </div>
-        </section>
 
-        <!-- ==========================
-                GOALS SECTION
-        =========================== -->
+          <div id="day-planner" class="day-planner hidden">
+            <div class="day-planner-header">
+              <button id="back-calendar">
+                <i class="ri-arrow-left-line"></i>
 
-        <section id="goals-section" class="page-section hidden">
-          <div class="section-heading">
-            <h2>Goals Tracker</h2>
+                Back
+              </button>
 
-            <p>Track your personal goals.</p>
-          </div>
+              <h2 id="selected-day-title">Thursday, July 9</h2>
 
-          <div class="module-container">
-            <div class="goals-toolbar">
-              <button id="add-goal-btn" class="primary-btn">
+              <button id="custom-event-btn" class="primary-btn">
                 <i class="ri-add-line"></i>
-                Add Goal
+
+                Custom Event
               </button>
             </div>
 
-            <div id="goals-list" class="goals-list">
-              <div class="empty-state">
-                <i class="ri-focus-3-line"></i>
+            <div id="timeline-container" class="timeline-container"></div>
+          </div>
+        </section>
 
-                <h3>No Goals Yet</h3>
+        <!-- ==========================
+        GOALS DASHBOARD
+========================== -->
 
-                <p>Create your first goal.</p>
+        <section id="goals-section" class="page-section hidden">
+          <div class="goals-dashboard">
+            <div class="dashboard-header">
+              <div>
+                <h2>🎯 My Goals</h2>
+
+                <p id="goal-greeting">Good Evening</p>
               </div>
+
+              <button id="add-item-btn" class="primary-btn">
+                <i class="ri-add-line"></i>
+
+                Add
+              </button>
+            </div>
+
+            <!-- Overall Progress -->
+
+            <div class="dashboard-card">
+              <h3>Overall Progress</h3>
+
+              <div class="overall-progress">
+                <div
+                  id="overall-progress-fill"
+                  class="overall-progress-fill"
+                ></div>
+              </div>
+
+              <p id="overall-progress-text">0%</p>
+            </div>
+
+            <!-- Daily Goals -->
+
+            <div class="dashboard-card">
+              <div class="card-heading">
+                <h3>Today's Goals</h3>
+              </div>
+
+              <div class="daily-goals">
+                <div id="daily-goals-list"></div>
+
+                <button id="add-daily-goal" class="secondary-btn">
+                  <i class="ri-add-line"></i>
+
+                  Add Daily Goal
+                </button>
+              </div>
+            </div>
+
+            <!-- Habits -->
+
+            <div class="dashboard-card">
+              <div class="card-heading">
+                <h3>Habits</h3>
+              </div>
+
+              <div id="habits-list" class="habits-list">
+
+    <div class="empty-state">
+
+        <i class="ri-fire-line"></i>
+
+        <h3>No Habits Yet</h3>
+
+        <p>Start building consistency.</p>
+
+    </div>
+
+</div>
+
+<button
+    id="add-habit-btn"
+    class="secondary-btn"
+>
+
+    <i class="ri-add-line"></i>
+
+    Add Habit
+
+</button>
+            </div>
+
+            <!-- Life Categories -->
+
+            <div class="dashboard-card">
+              <div class="card-heading">
+                <h3>Life Categories</h3>
+              </div>
+
+              <div id="life-categories"></div>
+            </div>
+
+            <!-- Bucket List -->
+
+            <div class="dashboard-card">
+              <div class="card-heading">
+                <h3>Bucket List</h3>
+              </div>
+
+              <div id="bucket-list"></div>
             </div>
           </div>
         </section>
@@ -737,57 +834,200 @@
       </div>
     </div>
 
-    <div id="goal-modal" class="modal-overlay hidden">
-      <div class="modal">
-        <div class="modal-header">
-          <h2 id="goal-modal-title">Add Goal</h2>
+    <!-- ==========================
+        DAILY GOAL MODAL
+========================== -->
 
-          <button id="close-goal-modal" class="modal-close" type="button">
-            <i class="ri-close-line"></i>
-          </button>
+<div id="daily-goal-modal" class="modal-overlay hidden">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <h2>Add Daily Goal</h2>
+
+            <button
+                id="close-daily-modal"
+                class="modal-close"
+                type="button"
+            >
+                <i class="ri-close-line"></i>
+            </button>
+
         </div>
 
-        <form id="goal-form">
-          <input type="hidden" id="goal-id" />
+        <form id="daily-goal-form">
 
-          <div class="form-group">
-            <label> Goal Title </label>
+            <div class="form-group">
 
-            <input id="goal-title" class="form-input" type="text" />
-          </div>
+                <label>Goal</label>
 
-          <div class="form-group">
-            <label> Target </label>
+                <input
+                    id="daily-goal-title"
+                    class="form-input"
+                    type="text"
+                >
 
-            <input id="goal-target" class="form-input" type="number" min="1" />
-          </div>
+            </div>
 
-          <div class="form-group">
-            <label> Progress </label>
+            <div class="form-group">
 
-            <input
-              id="goal-progress"
-              class="form-input"
-              type="number"
-              value="0"
-              min="0"
-            />
-          </div>
+                <label>Category</label>
 
-          <div class="modal-actions">
-            <button type="button" id="delete-goal" class="danger-btn hidden">
-              Delete
-            </button>
+                <select
+                    id="daily-goal-category"
+                    class="form-input"
+                >
 
-            <button type="button" id="cancel-goal" class="secondary-btn">
-              Cancel
-            </button>
+                    <option>Health</option>
+                    <option>Learning</option>
+                    <option>Career</option>
+                    <option>Personal</option>
+                    <option>Finance</option>
 
-            <button class="primary-btn" type="submit">Save Goal</button>
-          </div>
+                </select>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Priority</label>
+
+                <select
+                    id="daily-goal-priority"
+                    class="form-input"
+                >
+
+                    <option>Low</option>
+                    <option selected>Medium</option>
+                    <option>High</option>
+
+                </select>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Notes</label>
+
+                <textarea
+                    id="daily-goal-notes"
+                    class="form-input"
+                    rows="3"
+                ></textarea>
+
+            </div>
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    id="cancel-daily-goal"
+                    class="secondary-btn"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                >
+                    Save Goal
+                </button>
+
+            </div>
+
         </form>
-      </div>
+
     </div>
+
+</div>
+
+
+<div id="habit-modal" class="modal-overlay hidden">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <h2>Add Habit</h2>
+
+            <button
+                id="close-habit-modal"
+                class="modal-close"
+                type="button"
+            >
+
+                <i class="ri-close-line"></i>
+
+            </button>
+
+        </div>
+
+        <form id="habit-form">
+
+            <div class="form-group">
+
+                <label>Habit Name</label>
+
+                <input
+                    id="habit-title"
+                    class="form-input"
+                    type="text"
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Category</label>
+
+                <select
+                    id="habit-category"
+                    class="form-input"
+                >
+
+                    <option>Health</option>
+
+                    <option>Learning</option>
+
+                    <option>Career</option>
+
+                    <option>Personal</option>
+
+                </select>
+
+            </div>
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    id="cancel-habit"
+                    class="secondary-btn"
+                >
+
+                    Cancel
+
+                </button>
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                >
+
+                    Save Habit
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+    
     <div id="toast-container" class="toast-container"></div>
 
     <!-- ==========================

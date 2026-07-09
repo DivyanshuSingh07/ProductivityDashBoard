@@ -252,16 +252,22 @@ registerForm.addEventListener("submit", (e) => {
     },
 
     weather: {
+      city: "",
 
-    city: "",
+      temperature: null,
 
-    temperature: null,
+      description: "",
 
-    description: "",
+      updatedAt: null,
+    },
 
-    updatedAt: null
-
-},
+    dailyGoals: [],
+    habits: [],
+    categories: [],
+    lifeGoals: [],
+    bucketList: [],
+    reflections: [],
+    achievements: [],
   };
 
   users.push(newUser);

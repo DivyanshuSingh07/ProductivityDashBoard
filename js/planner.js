@@ -8,6 +8,8 @@ let currentMonth = currentDate.getMonth();
 
 let currentYear = currentDate.getFullYear();
 
+let selectedPlannerDate = null;
+
 /* ==========================
         INITIALIZE PLANNER
 ========================== */
@@ -28,7 +30,6 @@ let currentYear = currentDate.getFullYear();
 // }
 
 function initializePlanner() {
-
   const prevBtn = document.getElementById("prev-month");
   const nextBtn = document.getElementById("next-month");
 
@@ -39,6 +40,8 @@ function initializePlanner() {
 
   renderCalendar();
 
+  renderDayPlanner();
+
   const plannerForm = document.getElementById("planner-form");
 
   if (plannerForm) {
@@ -47,14 +50,32 @@ function initializePlanner() {
 
   const deleteBtn = document.getElementById("delete-event");
 
-if (deleteBtn) {
+  if (deleteBtn) {
+    deleteBtn.addEventListener("click", deletePlannerEvent);
+  }
 
-    deleteBtn.addEventListener(
-        "click",
-        deletePlannerEvent
-    );
+  const backBtn = document.getElementById("back-calendar");
 
-}
+  if (backBtn) {
+    backBtn.addEventListener("click", closeDayPlanner);
+  }
+  const customBtn = document.getElementById("custom-event-btn");
+
+  if (customBtn) {
+    customBtn.addEventListener("click", () => {
+      document.getElementById("planner-form").reset();
+
+      document.getElementById("event-id").value = "";
+
+      document.getElementById("selected-date").value = selectedPlannerDate;
+
+      document.getElementById("planner-modal-title").textContent = "Add Event";
+
+      document.getElementById("delete-event").classList.add("hidden");
+
+      openPlannerModal();
+    });
+  }
 }
 
 /* ==========================
@@ -94,7 +115,6 @@ function nextMonth() {
 ========================== */
 
 function renderCalendar() {
-
   const monthHeading = document.getElementById("current-month");
 
   const calendarGrid = document.getElementById("calendar-grid");
@@ -136,27 +156,23 @@ function renderCalendar() {
 
   /* Days */
 
-    for (let day = 1; day <= totalDays; day++) {
+  for (let day = 1; day <= totalDays; day++) {
+    const cell = document.createElement("div");
 
-        const cell = document.createElement("div");
+    cell.className = "calendar-day";
 
-        cell.className = "calendar-day";
+    cell.textContent = day;
 
-        cell.textContent = day;
+    highlightToday(cell, day);
 
-        highlightToday(cell, day);
+    addPlannerIndicator(cell, day);
 
-        addPlannerIndicator(cell, day);
+    cell.addEventListener("click", () => {
+      selectDate(day, cell);
+    });
 
-        cell.addEventListener("click", () => {
-
-        selectDate(day, cell);
-
-        });
-
-        calendarGrid.appendChild(cell);
-
-    }
+    calendarGrid.appendChild(cell);
+  }
 }
 
 /* ==========================
@@ -180,29 +196,21 @@ function highlightToday(cell, day) {
 ========================== */
 
 function addPlannerIndicator(cell, day) {
+  const user = getCurrentUser();
 
-    const user = getCurrentUser();
+  if (!user) return;
 
-    if (!user) return;
+  const date = `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 
-    const date =
+  const hasEvent = user.planner.some((event) => event.date === date);
 
-        `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+  if (!hasEvent) return;
 
-    const hasEvent = user.planner.some(
+  const dot = document.createElement("span");
 
-        event => event.date === date
+  dot.className = "planner-dot";
 
-    );
-
-    if (!hasEvent) return;
-
-    const dot = document.createElement("span");
-
-    dot.className = "planner-dot";
-
-    cell.appendChild(dot);
-
+  cell.appendChild(dot);
 }
 
 /* ==========================
@@ -210,180 +218,311 @@ function addPlannerIndicator(cell, day) {
 ========================== */
 
 function selectDate(day, cell) {
+  document.querySelectorAll(".calendar-day").forEach((item) => {
+    item.classList.remove("selected");
+  });
 
-    document
-        .querySelectorAll(".calendar-day")
-        .forEach(item => {
+  cell.classList.add("selected");
 
-            item.classList.remove("selected");
+  selectedPlannerDate = `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 
-        });
+  document.getElementById("selected-date").value = selectedPlannerDate;
 
-    cell.classList.add("selected");
+  document.querySelector(".planner-container").classList.add("hidden");
 
-    const selectedDate =
-        `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+  document.getElementById("day-planner").classList.remove("hidden");
 
-    document.getElementById("selected-date").value = selectedDate;
+  const date = new Date(selectedPlannerDate);
 
-    document.getElementById("planner-modal-title").textContent = "Add Event";
+  document.getElementById("selected-day-title").textContent =
+    date.toDateString();
 
-    openPlannerModal();
-
+  renderDayPlanner();
 }
-
 /* ==========================
         LOAD EVENT
 ========================== */
 
 function loadPlannerEvent(date) {
+  const user = getCurrentUser();
 
-    const user = getCurrentUser();
+  if (!user) return;
 
-    if (!user) return;
+  const event = user.planner.find((item) => item.date === date);
 
-    const event = user.planner.find(
+  document.getElementById("planner-form").reset();
 
-        item => item.date === date
+  document.getElementById("selected-date").value = date;
 
-    );
+  if (!event) {
+    document.getElementById("event-id").value = "";
 
-    document.getElementById("planner-form").reset();
+    document.getElementById("planner-modal-title").textContent = "Add Event";
 
-    document.getElementById("selected-date").value = date;
-
-    if (!event) {
-
-        document.getElementById("event-id").value = "";
-
-        document.getElementById("planner-modal-title").textContent =
-            "Add Event";
-
-        document
-            .getElementById("delete-event")
-            .classList.add("hidden");
-
-        openPlannerModal();
-
-        return;
-
-    }
-
-    document.getElementById("event-id").value = event.id;
-
-    document.getElementById("event-title").value = event.title;
-
-    document.getElementById("event-category").value = event.category;
-
-    document.getElementById("event-time").value = event.time;
-
-    document.getElementById("planner-modal-title").textContent =
-        "Edit Event";
-
-    document
-        .getElementById("delete-event")
-        .classList.remove("hidden");
+    document.getElementById("delete-event").classList.add("hidden");
 
     openPlannerModal();
 
+    return;
+  }
+
+  document.getElementById("event-id").value = event.id;
+
+  document.getElementById("event-title").value = event.title;
+
+  document.getElementById("event-category").value = event.category;
+
+  document.getElementById("event-time").value = event.time;
+
+  document.getElementById("planner-modal-title").textContent = "Edit Event";
+
+  document.getElementById("delete-event").classList.remove("hidden");
+
+  openPlannerModal();
 }
+
+/* ==========================
+        LOAD EVENT BY ID
+========================== */
+
+function loadPlannerEventById(eventId) {
+  const user = getCurrentUser();
+
+  if (!user) return;
+
+  const event = user.planner.find((item) => item.id === eventId);
+
+  if (!event) return;
+
+  document.getElementById("planner-form").reset();
+
+  document.getElementById("event-id").value = event.id;
+
+  document.getElementById("selected-date").value = event.date;
+
+  document.getElementById("event-title").value = event.title;
+
+  document.getElementById("event-category").value = event.category;
+
+  document.getElementById("event-time").value = event.time;
+
+  document.getElementById("planner-modal-title").textContent = "Edit Event";
+
+  document.getElementById("delete-event").classList.remove("hidden");
+
+  openPlannerModal();
+}
+
 /* ==========================
         SAVE EVENT
 ========================== */
 
 function savePlannerEvent(event) {
+  event.preventDefault();
 
-    event.preventDefault();
+  const user = getCurrentUser();
 
-    const user = getCurrentUser();
+  if (!user) return;
 
-    if (!user) return;
+  const title = document.getElementById("event-title").value.trim();
 
-    const title = document
-        .getElementById("event-title")
-        .value
-        .trim();
+  if (title === "") {
+    document.getElementById("event-title").focus();
 
-    if (title === "") {
+    return;
+  }
 
-        document.getElementById("event-title").focus();
+  const plannerEvent = {
+    id: generateId(),
 
-        return;
+    title: title,
 
-    }
+    category: document.getElementById("event-category").value,
 
-    const plannerEvent = {
+    time: document.getElementById("event-time").value,
 
-        id: generateId(),
+    date: document.getElementById("selected-date").value,
+  };
 
-        title: title,
+  const eventId = document.getElementById("event-id").value;
 
-        category: document.getElementById("event-category").value,
+  if (eventId) {
+    const index = user.planner.findIndex((item) => item.id == eventId);
 
-        time: document.getElementById("event-time").value,
+    plannerEvent.id = Number(eventId);
 
-        date: document.getElementById("selected-date").value
+    user.planner[index] = plannerEvent;
+  } else {
+    user.planner.push(plannerEvent);
+  }
 
-    };
+  updateCurrentUser(user);
 
-    const eventId =
-        document.getElementById("event-id").value;
+  closePlannerModal();
 
-    if (eventId) {
+  renderCalendar();
 
-        const index = user.planner.findIndex(
-
-            item => item.id == eventId
-
-        );
-
-        plannerEvent.id = Number(eventId);
-
-        user.planner[index] = plannerEvent;
-
-    }
-
-    else {
-
-        user.planner.push(plannerEvent);
-
-    }
-
-    updateCurrentUser(user);
-
-    closePlannerModal();
-
-    renderCalendar();
-
+  renderDayPlanner();
 }
-
 
 /* ==========================
         DELETE EVENT
 ========================== */
 
 function deletePlannerEvent() {
+  const user = getCurrentUser();
 
-    const user = getCurrentUser();
+  if (!user) return;
 
-    if (!user) return;
+  const eventId = Number(document.getElementById("event-id").value);
 
-    const eventId = Number(
+  user.planner = user.planner.filter((event) => event.id !== eventId);
 
-        document.getElementById("event-id").value
+  updateCurrentUser(user);
 
-    );
+  closePlannerModal();
 
-    user.planner = user.planner.filter(
+  renderCalendar();
 
-        event => event.id !== eventId
+  renderDayPlanner();
+}
 
-    );
+function renderDayPlanner() {
+  const container = document.getElementById("timeline-container");
 
-    updateCurrentUser(user);
+  const user = getCurrentUser();
 
-    closePlannerModal();
+  const events = user
+    ? user.planner.filter((event) => event.date === selectedPlannerDate)
+    : [];
 
-    renderCalendar();
+  container.innerHTML = "";
 
+  for (let hour = 0; hour < 24; hour++) {
+    const slot = document.createElement("div");
+
+    slot.className = "time-slot";
+
+    slot.innerHTML = `
+
+            <div class="slot-time">
+
+                ${String(hour).padStart(2, "0")}:00
+
+            </div>
+
+            <div class="slot-content">
+
+            </div>
+
+        `;
+    const hourEvents = events
+
+      .filter((event) => Number(event.time.split(":")[0]) === hour)
+
+      .sort((a, b) => a.time.localeCompare(b.time));
+
+    hourEvents.forEach((event) => {
+      const card = document.createElement("div");
+
+      card.className = "planner-event";
+
+      card.style.borderLeft = `6px solid ${getCategoryColor(event.category)}`;
+
+      card.innerHTML = `
+
+    <div class="planner-event-top">
+
+        <h4>${event.title}</h4>
+
+        <span
+    class="planner-category"
+    style="background:${getCategoryColor(event.category)}">
+
+    ${event.category}
+
+</span>
+
+    </div>
+
+    <div class="planner-event-bottom">
+
+        <span>
+            <i class="ri-time-line"></i>
+            ${event.time}
+        </span>
+
+    </div>
+
+`;
+
+      card.addEventListener(
+        "click",
+
+        (e) => {
+          e.stopPropagation();
+
+          loadPlannerEventById(event.id);
+        },
+      );
+
+      slot.querySelector(".slot-content").appendChild(card);
+    });
+
+    slot.addEventListener("click", () => {
+      loadPlannerEventAtHour(hour);
+    });
+    container.appendChild(slot);
+  }
+}
+
+function showCalendar() {
+  document.querySelector(".planner-container").classList.remove("hidden");
+
+  document.getElementById("day-planner").classList.add("hidden");
+}
+
+function closeDayPlanner() {
+  document.getElementById("day-planner").classList.add("hidden");
+
+  document.querySelector(".planner-container").classList.remove("hidden");
+}
+
+function loadPlannerEventAtHour(hour) {
+  document.getElementById("planner-form").reset();
+
+  document.getElementById("selected-date").value = selectedPlannerDate;
+
+  document.getElementById("event-time").value =
+    `${String(hour).padStart(2, "0")}:00`;
+
+  document.getElementById("event-id").value = "";
+
+  document.getElementById("delete-event").classList.add("hidden");
+
+  document.getElementById("planner-modal-title").textContent = "Add Event";
+
+  openPlannerModal();
+}
+
+function getCategoryColor(category) {
+  switch (category) {
+    case "Work":
+      return "#2563eb";
+
+    case "Study":
+      return "#7c3aed";
+
+    case "Health":
+      return "#16a34a";
+
+    case "Shopping":
+      return "#f59e0b";
+
+    case "Personal":
+      return "#ec4899";
+
+    default:
+      return "#64748b";
+  }
 }
