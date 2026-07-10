@@ -2,18 +2,23 @@ let editingDailyGoalId = null;
 let editingHabitId = null;
 let editingCategoryId = null;
 
+
 function initializeGoals() {
-  resetDailyData();
 
-  renderGreeting();
+    resetDailyData();
 
-  renderOverallProgress();
+    renderGreeting();
 
-  initializeDailyGoals();
+    renderOverallProgress();
 
-  initializeHabits();
+    initializeDailyGoals();
 
-  initializeCategories();
+    initializeHabits();
+
+    initializeCategories();
+
+    initializeBucketList();
+
 }
 
 function getToday() {
@@ -1478,3 +1483,492 @@ function editHabit(habitId){
 
 }
 
+
+
+/* ==========================
+        INITIALIZE BUCKET LIST
+========================== */
+
+function initializeBucketList(){
+
+    const addBtn =
+        document.getElementById("add-bucket-btn");
+
+    const closeBtn =
+        document.getElementById("close-bucket-modal");
+
+    const cancelBtn =
+        document.getElementById("cancel-bucket");
+
+    const form =
+        document.getElementById("bucket-form");
+
+    const container =
+        document.getElementById("bucket-list");
+
+    addBtn.addEventListener(
+
+        "click",
+
+        openBucketModal
+
+    );
+
+    closeBtn.addEventListener(
+
+        "click",
+
+        closeBucketModal
+
+    );
+
+    cancelBtn.addEventListener(
+
+        "click",
+
+        closeBucketModal
+
+    );
+
+    form.addEventListener(
+
+        "submit",
+
+        saveBucketItem
+
+    );
+
+    container.addEventListener(
+
+        "click",
+
+        handleBucketActions
+
+    );
+
+    renderBucketList();
+
+}
+
+function openBucketModal(){
+
+    document
+
+        .getElementById("bucket-modal")
+
+        .classList.remove("hidden");
+
+}
+
+function closeBucketModal(){
+
+    document
+
+        .getElementById("bucket-modal")
+
+        .classList.add("hidden");
+
+    document
+
+        .getElementById("bucket-form")
+
+        .reset();
+
+        editingBucketId=null;
+
+    document
+
+        .getElementById("editing-bucket-id")
+
+        .value="";
+
+    document
+
+        .getElementById("bucket-modal-title")
+
+        .textContent="Add Dream";
+
+}
+
+function saveBucketItem(event){
+
+    event.preventDefault();
+
+    const user = getCurrentUser();
+
+    if(!user) return;
+
+    const editingId =
+        document
+            .getElementById("editing-bucket-id")
+            .value;
+
+    const data = {
+
+        title:
+            document
+                .getElementById("bucket-title")
+                .value
+                .trim(),
+
+        category:
+            document
+                .getElementById("bucket-category")
+                .value,
+
+        priority:
+            document
+                .getElementById("bucket-priority")
+                .value,
+
+        targetDate:
+            document
+                .getElementById("bucket-date")
+                .value,
+
+        notes:
+            document
+                .getElementById("bucket-notes")
+                .value
+                .trim()
+
+    };
+
+    if(data.title === "") return;
+
+    if(editingId){
+
+        const item =
+            user.bucketList.find(
+                bucket => bucket.id === Number(editingId)
+            );
+
+        if(item){
+            Object.assign(item, data);
+        }
+
+    }else{
+
+        user.bucketList.push({
+
+            id: generateId(),
+
+            ...data,
+
+            completed: false,
+
+            createdAt: getToday()
+
+        });
+
+    }
+
+    updateCurrentUser(user);
+
+    closeBucketModal();
+
+    renderBucketList();
+
+}
+
+function renderBucketList(){
+
+    const user = getCurrentUser();
+
+    if(!user) return;
+
+    const container =
+        document.getElementById("bucket-list");
+
+    container.innerHTML="";
+
+    if(user.bucketList.length===0){
+
+        container.innerHTML=`
+
+            <div class="empty-state">
+
+                <i class="ri-flag-line"></i>
+
+                <h3>No Dreams Yet</h3>
+
+                <p>Add something you want to achieve.</p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+    user.bucketList.forEach(item=>{
+
+        container.appendChild(
+
+            createBucketCard(item)
+
+        );
+
+    });
+
+}
+
+function createBucketCard(item){
+
+    const card=document.createElement("div");
+
+    card.className="bucket-card";
+
+    card.innerHTML=`
+
+        <div class="bucket-card-header">
+
+            <div>
+
+                <h3 class="${
+                    item.completed
+                    ? "bucket-completed"
+                    : ""
+                }">
+
+                    ${item.title}
+
+                </h3>
+
+                <div class="bucket-meta">
+
+                    <span class="bucket-category">
+
+                        ${item.category}
+
+                    </span>
+
+                    <span class="bucket-priority ${item.priority.toLowerCase()}">
+
+                        ${item.priority}
+
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="bucket-actions">
+
+                <button
+
+                    class="edit-bucket-btn"
+
+                    data-id="${item.id}"
+
+                >
+
+                    <i class="ri-edit-line"></i>
+
+                </button>
+
+                <button
+
+                    class="delete-bucket-btn"
+
+                    data-id="${item.id}"
+
+                >
+
+                    <i class="ri-delete-bin-line"></i>
+
+                </button>
+
+            </div>
+
+        </div>
+
+        ${
+            item.notes
+            ?
+
+            `<p class="bucket-notes">
+
+                ${item.notes}
+
+            </p>`
+
+            :
+
+            ""
+        }
+
+        ${
+            item.targetDate
+
+            ?
+
+            `<div class="bucket-date">
+
+                🎯 Target :
+
+                ${item.targetDate}
+
+            </div>`
+
+            :
+
+            ""
+        }
+
+        <button
+
+            class="bucket-complete-btn"
+
+            data-id="${item.id}"
+
+        >
+
+            ${
+                item.completed
+
+                ?
+
+                "Completed"
+
+                :
+
+                "Mark Completed"
+
+            }
+
+        </button>
+
+    `;
+
+    return card;
+
+}
+
+function handleBucketActions(event){
+
+    const completeBtn =
+        event.target.closest(".bucket-complete-btn");
+
+    if(completeBtn){
+
+        toggleBucketComplete(
+
+            Number(completeBtn.dataset.id)
+
+        );
+
+        return;
+
+    }
+
+    const editBtn =
+        event.target.closest(".edit-bucket-btn");
+
+    if(editBtn){
+
+        editBucketItem(
+
+            Number(editBtn.dataset.id)
+
+        );
+
+        return;
+
+    }
+
+    const deleteBtn =
+        event.target.closest(".delete-bucket-btn");
+
+    if(deleteBtn){
+
+        deleteBucketItem(
+
+            Number(deleteBtn.dataset.id)
+
+        );
+
+    }
+
+}
+
+function toggleBucketComplete(id){
+
+    const user=getCurrentUser();
+
+    if(!user) return;
+
+    const item=
+
+        user.bucketList.find(
+
+            bucket=>bucket.id===id
+
+        );
+
+    if(!item) return;
+
+    item.completed=!item.completed;
+
+    updateCurrentUser(user);
+
+    renderBucketList();
+
+}
+
+function deleteBucketItem(id){
+
+    const confirmDelete = confirm(
+        "Delete this bucket list item?"
+    );
+
+    if(!confirmDelete){
+        return;
+    }
+
+    const user = getCurrentUser();
+
+    if(!user) return;
+
+    user.bucketList =
+        user.bucketList.filter(
+
+            item=>item.id!==id
+
+        );
+
+    updateCurrentUser(user);
+
+    renderBucketList();
+
+}
+
+
+function editBucketItem(id){
+
+    const user = getCurrentUser();
+
+    if(!user) return;
+
+    const item = user.bucketList.find(
+        bucket => bucket.id === id
+    );
+
+    if(!item) return;
+
+    document.getElementById("editing-bucket-id").value = item.id;
+
+    document.getElementById("bucket-title").value = item.title;
+
+    document.getElementById("bucket-category").value = item.category;
+
+    document.getElementById("bucket-priority").value = item.priority;
+
+    document.getElementById("bucket-date").value = item.targetDate;
+
+    document.getElementById("bucket-notes").value = item.notes;
+
+    openBucketModal();
+
+}

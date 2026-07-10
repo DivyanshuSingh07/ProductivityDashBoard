@@ -443,13 +443,50 @@
 
             <!-- Bucket List -->
 
-            <div class="dashboard-card">
-              <div class="card-heading">
-                <h3>Bucket List</h3>
-              </div>
+            <!-- Bucket List -->
 
-              <div id="bucket-list"></div>
-            </div>
+<div class="dashboard-card">
+
+    <div class="card-heading">
+
+        <h3>🌍 Bucket List</h3>
+
+        <button
+            id="add-bucket-btn"
+            class="secondary-btn"
+        >
+
+            <i class="ri-add-line"></i>
+
+            Add Dream
+
+        </button>
+
+    </div>
+
+    <div
+        id="bucket-list"
+        class="bucket-list"
+    >
+
+        <div class="empty-state">
+
+            <i class="ri-flag-line"></i>
+
+            <h3>No Dreams Yet</h3>
+
+            <p>
+
+                Start building your dream life.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
           </div>
         </section>
 
@@ -1198,6 +1235,177 @@
                 >
 
                     Save Goal
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<div
+    id="bucket-modal"
+    class="modal-overlay hidden"
+>
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <h2 id="bucket-modal-title">
+
+                Add Dream
+
+            </h2>
+
+            <button
+                id="close-bucket-modal"
+                class="modal-close"
+                type="button"
+            >
+
+                <i class="ri-close-line"></i>
+
+            </button>
+
+        </div>
+
+        <form id="bucket-form">
+
+            <input
+                type="hidden"
+                id="editing-bucket-id"
+            >
+
+            <div class="form-group">
+
+                <label>
+
+                    Dream
+
+                </label>
+
+                <input
+                    id="bucket-title"
+                    class="form-input"
+                    type="text"
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+
+                    Category
+
+                </label>
+
+                <select
+                    id="bucket-category"
+                    class="form-input"
+                >
+
+                    <option>Travel</option>
+
+                    <option>Career</option>
+
+                    <option>Adventure</option>
+
+                    <option>Health</option>
+
+                    <option>Personal</option>
+
+                    <option>Learning</option>
+
+                    <option>Finance</option>
+
+                    <option>Other</option>
+
+                </select>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+
+                    Priority
+
+                </label>
+
+                <select
+                    id="bucket-priority"
+                    class="form-input"
+                >
+
+                    <option>Low</option>
+
+                    <option selected>
+
+                        Medium
+
+                    </option>
+
+                    <option>High</option>
+
+                </select>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+
+                    Target Date
+
+                </label>
+
+                <input
+                    id="bucket-date"
+                    class="form-input"
+                    type="date"
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+
+                    Notes
+
+                </label>
+
+                <textarea
+                    id="bucket-notes"
+                    class="form-input"
+                    rows="3"
+                ></textarea>
+
+            </div>
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    id="cancel-bucket"
+                    class="secondary-btn"
+                >
+
+                    Cancel
+
+                </button>
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                >
+
+                    Save Dream
 
                 </button>
 
