@@ -419,12 +419,27 @@
             <!-- Life Categories -->
 
             <div class="dashboard-card">
-              <div class="card-heading">
-                <h3>Life Categories</h3>
-              </div>
 
-              <div id="life-categories"></div>
-            </div>
+    <div class="card-heading">
+
+        <h3>Life Categories</h3>
+
+        <button
+            id="add-category-btn"
+            class="secondary-btn"
+        >
+
+            <i class="ri-add-line"></i>
+
+            Add Category
+
+        </button>
+
+    </div>
+
+    <div id="life-categories"></div>
+
+</div>
 
             <!-- Bucket List -->
 
@@ -1017,6 +1032,172 @@
                 >
 
                     Save Habit
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<div
+    id="category-modal"
+    class="modal-overlay hidden"
+>
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <h2>Add Category</h2>
+
+            <button
+                id="close-category-modal"
+                class="modal-close"
+                type="button"
+            >
+
+                <i class="ri-close-line"></i>
+
+            </button>
+
+        </div>
+
+        <form id="category-form">
+
+            <div class="form-group">
+
+                <label>
+
+                    Category Name
+
+                </label>
+
+                <input
+
+                    id="category-name"
+
+                    class="form-input"
+
+                    type="text"
+
+                >
+
+            </div>
+
+            <div class="modal-actions">
+
+                <button
+
+                    type="button"
+
+                    id="cancel-category"
+
+                    class="secondary-btn"
+
+                >
+
+                    Cancel
+
+                </button>
+
+                <button
+
+                    type="submit"
+
+                    class="primary-btn"
+
+                >
+
+                    Save Category
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<div
+    id="category-goal-modal"
+    class="modal-overlay hidden"
+>
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <h2>Add Goal</h2>
+
+            <button
+                id="close-category-goal-modal"
+                class="modal-close"
+                type="button"
+            >
+                <i class="ri-close-line"></i>
+            </button>
+
+        </div>
+
+        <form id="category-goal-form">
+
+            <input
+                type="hidden"
+                id="selected-category-id"
+            >
+
+            <div class="form-group">
+
+                <label>
+
+                    Goal
+
+                </label>
+
+                <input
+
+                    id="category-goal-title"
+
+                    class="form-input"
+
+                    type="text"
+
+                >
+
+            </div>
+
+            <div class="modal-actions">
+
+                <button
+
+                    type="button"
+
+                    id="cancel-category-goal"
+
+                    class="secondary-btn"
+
+                >
+
+                    Cancel
+
+                </button>
+
+                <button
+
+                    type="submit"
+
+                    class="primary-btn"
+
+                >
+
+                    Save Goal
 
                 </button>
 

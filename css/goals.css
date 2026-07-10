@@ -1,270 +1,509 @@
-.goals-dashboard{
+.goals-dashboard {
+  display: grid;
 
-    display:grid;
-
-    gap:1.5rem;
-
+  gap: 1.5rem;
 }
 
-.dashboard-header{
+.dashboard-header {
+  display: flex;
 
-    display:flex;
+  justify-content: space-between;
 
-    justify-content:space-between;
-
-    align-items:center;
-
+  align-items: center;
 }
 
-.dashboard-header h2{
+.dashboard-header h2 {
+  font-size: 2rem;
 
-    font-size:2rem;
-
-    margin-bottom:.3rem;
-
+  margin-bottom: 0.3rem;
 }
 
-.dashboard-header p{
-
-    opacity:.7;
-
+.dashboard-header p {
+  opacity: 0.7;
 }
 
-.dashboard-card{
+.dashboard-card {
+  background: var(--card-bg);
 
-    background:var(--card-bg);
+  border-radius: 18px;
 
-    border-radius:18px;
+  padding: 1.5rem;
 
-    padding:1.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
 
-    box-shadow:0 10px 25px rgba(0,0,0,.08);
+  display: flex;
 
-    display:flex;
+  flex-direction: column;
 
-    flex-direction:column;
-
-    gap:1rem;
-
+  gap: 1rem;
 }
 
-.card-heading{
+.card-heading {
+  display: flex;
 
-    display:flex;
+  justify-content: space-between;
 
-    justify-content:space-between;
-
-    align-items:center;
-
+  align-items: center;
 }
 
-.overall-progress{
+.overall-progress {
+  height: 14px;
 
-    height:14px;
+  border-radius: 20px;
 
-    border-radius:20px;
+  overflow: hidden;
 
-    overflow:hidden;
-
-    background:rgba(0,0,0,.08);
-
+  background: rgba(0, 0, 0, 0.08);
 }
 
-.overall-progress-fill{
+.overall-progress-fill {
+  height: 100%;
 
-    height:100%;
+  width: 0%;
 
-    width:0%;
+  background: linear-gradient(90deg, #3b82f6, #06b6d4);
 
-    background:linear-gradient(
-
-        90deg,
-
-        #3b82f6,
-
-        #06b6d4
-
-    );
-
-    transition:.4s;
-
+  transition: 0.4s;
 }
 
-.overall-progress-text{
-
-    font-weight:700;
-
+.overall-progress-text {
+  font-weight: 700;
 }
 
-.daily-goals{
+.daily-goals {
+  display: flex;
 
-    display:flex;
+  flex-direction: column;
 
-    flex-direction:column;
-
-    gap:1rem;
-
+  gap: 1rem;
 }
 
-.daily-goal{
+.daily-goal {
+  display: flex;
 
-    display:flex;
+  align-items: center;
 
-    align-items:center;
+  justify-content: space-between;
 
-    justify-content:space-between;
+  padding: 14px 18px;
 
-    padding:14px 18px;
+  border-radius: 12px;
 
-    border-radius:12px;
+  background: var(--surface);
 
-    background:var(--surface);
-
-    transition:.25s;
-
+  transition: 0.25s;
 }
 
-.daily-goal:hover{
-
-    transform:translateY(-2px);
-
+.daily-goal:hover {
+  transform: translateY(-2px);
 }
 
-.daily-left{
+.daily-left {
+  display: flex;
 
-    display:flex;
+  align-items: center;
 
-    align-items:center;
-
-    gap:12px;
-
+  gap: 12px;
 }
 
-.daily-left input{
+.daily-left input {
+  width: 20px;
 
-    width:20px;
+  height: 20px;
 
-    height:20px;
-
-    cursor:pointer;
-
+  cursor: pointer;
 }
 
-.daily-completed{
+.daily-completed {
+  text-decoration: line-through;
 
-    text-decoration:line-through;
-
-    opacity:.55;
-
+  opacity: 0.55;
 }
 
+.daily-left {
+  display: flex;
 
-.daily-goal{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:flex-start;
-
-    gap:20px;
-
-    padding:18px;
-
-    border-radius:15px;
-
-    background:var(--surface);
-
-    margin-bottom:15px;
-
+  gap: 15px;
 }
 
-.daily-left{
+.daily-info {
+  display: flex;
 
-    display:flex;
+  flex-direction: column;
 
-    gap:15px;
-
+  gap: 8px;
 }
 
-.daily-info{
+.daily-meta {
+  display: flex;
 
-    display:flex;
+  gap: 10px;
 
-    flex-direction:column;
-
-    gap:8px;
-
-}
-
-.daily-meta{
-
-    display:flex;
-
-    gap:10px;
-
-    flex-wrap:wrap;
-
+  flex-wrap: wrap;
 }
 
 .daily-category,
+.daily-priority {
+  padding: 4px 10px;
 
-.daily-priority{
+  border-radius: 20px;
 
-    padding:4px 10px;
+  font-size: 0.75rem;
 
-    border-radius:20px;
-
-    font-size:.75rem;
-
-    font-weight:600;
-
+  font-weight: 600;
 }
 
-.daily-notes{
+.daily-notes {
+  opacity: 0.8;
 
-    opacity:.8;
-
-    font-size:.9rem;
-
+  font-size: 0.9rem;
 }
 
-.health{
+.health {
+  background: #dcfce7;
 
-    background:#DCFCE7;
-
-    color:#166534;
-
+  color: #166534;
 }
 
-.learning{
+.learning {
+  background: #dbeafe;
 
-    background:#DBEAFE;
-
-    color:#1D4ED8;
-
+  color: #1d4ed8;
 }
 
-.career{
+.career {
+  background: #ede9fe;
 
-    background:#EDE9FE;
-
-    color:#6D28D9;
-
+  color: #6d28d9;
 }
 
-.personal{
+.personal {
+  background: #fce7f3;
 
-    background:#FCE7F3;
-
-    color:#BE185D;
-
+  color: #be185d;
 }
 
-.finance{
+.finance {
+  background: #fef3c7;
 
-    background:#FEF3C7;
+  color: #b45309;
+}
 
-    color:#B45309;
+.habit-card {
+  background: var(--surface);
 
+  padding: 18px;
+
+  border-radius: 16px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+
+  margin-bottom: 15px;
+}
+
+.habit-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: flex-start;
+}
+
+.habit-category {
+  display: inline-block;
+
+  margin-top: 6px;
+
+  padding: 4px 10px;
+
+  border-radius: 20px;
+
+  background: #eef3ff;
+
+  font-size: 0.8rem;
+}
+
+.delete-habit-btn {
+  border: none;
+
+  background: none;
+
+  cursor: pointer;
+
+  font-size: 1.2rem;
+
+  color: #ef4444;
+}
+
+.habit-streak {
+  font-weight: 600;
+}
+
+.habit-longest {
+  opacity: 0.75;
+
+  font-size: 0.9rem;
+}
+
+.habit-complete-btn {
+  align-self: flex-start;
+}
+
+.category-goal {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  padding: 12px 15px;
+
+  border-radius: 12px;
+
+  background: var(--surface);
+}
+
+.category-goal:last-child {
+  border-bottom: none;
+}
+
+.category-goal-left {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+.category-goal label {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  cursor: pointer;
+}
+
+.category-goal input {
+  width: 18px;
+
+  height: 18px;
+}
+
+.delete-category-goal {
+  border: none;
+
+  background: none;
+
+  cursor: pointer;
+
+  color: #ef4444;
+
+  font-size: 1.1rem;
+}
+
+.category-header-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+}
+
+.delete-category-btn {
+  border: none;
+
+  background: none;
+
+  cursor: pointer;
+
+  color: #ef4444;
+
+  font-size: 1.2rem;
+}
+
+.daily-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 0.5rem;
+}
+
+.daily-actions button {
+  width: 38px;
+
+  height: 38px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 1rem;
+
+  transition: 0.25s;
+}
+
+.edit-daily-goal {
+  background: #eef4ff;
+
+  color: #2563eb;
+}
+
+.edit-daily-goal:hover {
+  background: #2563eb;
+
+  color: #fff;
+}
+
+.delete-daily-goal {
+  background: #fee2e2;
+
+  color: #dc2626;
+}
+
+.delete-daily-goal:hover {
+  background: #dc2626;
+
+  color: #fff;
+}
+
+.daily-goal {
+  transition:
+    transform 0.25s,
+    background 0.25s,
+    opacity 0.25s;
+}
+
+.daily-goal:hover {
+  transform: translateY(-3px);
+}
+
+.daily-completed {
+  text-decoration: line-through;
+
+  opacity: 0.55;
+}
+
+.daily-priority.low {
+  background: #dcfce7;
+
+  color: #15803d;
+}
+
+.daily-priority.medium {
+  background: #fef3c7;
+
+  color: #b45309;
+}
+
+.daily-priority.high {
+  background: #fee2e2;
+
+  color: #dc2626;
+}
+
+.habit-actions {
+  display: flex;
+
+  gap: 0.5rem;
+}
+
+.habit-actions button {
+  width: 36px;
+
+  height: 36px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  transition: 0.25s;
+}
+
+.edit-habit-btn {
+  background: #eef4ff;
+
+  color: #2563eb;
+}
+
+.edit-habit-btn:hover {
+  background: #2563eb;
+
+  color: #fff;
+}
+
+.delete-habit-btn {
+  background: #fee2e2;
+
+  color: #dc2626;
+}
+
+.delete-habit-btn:hover {
+  background: #dc2626;
+
+  color: #fff;
+}
+
+.category-stats {
+  display: flex;
+
+  gap: 12px;
+
+  margin-top: 6px;
+
+  font-size: 0.85rem;
+
+  opacity: 0.75;
+}
+
+.category-progress {
+  height: 10px;
+
+  background: #ececec;
+
+  border-radius: 50px;
+
+  overflow: hidden;
+}
+
+.category-progress-fill {
+  height: 100%;
+
+  border-radius: 50px;
+
+  background: linear-gradient(90deg, #3b82f6, #06b6d4);
+}
+
+.category-body {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+
+  overflow: hidden;
+
+  transition: 0.35s;
 }

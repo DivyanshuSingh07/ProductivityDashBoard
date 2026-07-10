@@ -1,3 +1,7 @@
+let editingDailyGoalId = null;
+let editingHabitId = null;
+let editingCategoryId = null;
+
 function initializeGoals() {
   resetDailyData();
 
@@ -73,7 +77,7 @@ function renderGreeting() {
   const user = getCurrentUser();
 
   document.getElementById("goal-greeting").textContent =
-    `${greeting}, ${user.name}`;
+    `${greeting}, ${user.fullName}`;
 }
 
 function renderOverallProgress() {
@@ -122,18 +126,58 @@ function initializeDailyGoals() {
     }
   });
 
+  document.addEventListener("keydown", (event) => {
+
+    if (
+        event.key === "Escape" &&
+        !document
+            .getElementById("daily-goal-modal")
+            .classList.contains("hidden")
+    ) {
+
+        closeDailyGoalModal();
+
+    }
+
+});
+
   renderDailyGoals();
 }
 
-function openDailyGoalModal() {
-  document.getElementById("daily-goal-modal").classList.remove("hidden");
+function openDailyGoalModal(){
+
+    document
+        .getElementById("daily-goal-modal")
+        .classList.remove("hidden");
+
+    document
+        .getElementById("daily-goal-title")
+        .focus();
+
 }
 
-function closeDailyGoalModal() {
-  document.getElementById("daily-goal-modal").classList.add("hidden");
+function closeDailyGoalModal(){
 
-  document.getElementById("daily-goal-form").reset();
+    editingDailyGoalId = null;
+
+    document
+        .getElementById("daily-goal-modal")
+        .classList.add("hidden");
+
+    document
+        .getElementById("daily-goal-form")
+        .reset();
+
+    document.querySelector(
+        "#daily-goal-modal h2"
+    ).textContent = "Add Daily Goal";
+
+    document.querySelector(
+        '#daily-goal-form button[type="submit"]'
+    ).textContent = "Save Goal";
+
 }
+
 
 function saveDailyGoal(event) {
   event.preventDefault();
@@ -144,23 +188,66 @@ function saveDailyGoal(event) {
 
   const title = document.getElementById("daily-goal-title").value.trim();
 
+  const exists = user.dailyGoals.some(goal =>
+
+    goal.title.toLowerCase() === title.toLowerCase() &&
+    goal.id !== editingDailyGoalId
+
+);
+
+if(exists){
+
+    alert("A goal with this title already exists.");
+
+    return;
+
+}
+
   if (title === "") return;
 
-  user.dailyGoals.push({
-    id: generateId(),
+ if(editingDailyGoalId){
 
-    title,
+    const goal = user.dailyGoals.find(
 
-    category: document.getElementById("daily-goal-category").value,
+        item => item.id === editingDailyGoalId
 
-    priority: document.getElementById("daily-goal-priority").value,
+    );
 
-    notes: document.getElementById("daily-goal-notes").value.trim(),
+    goal.title = title;
 
-    completed: false,
+    goal.category =
+        document.getElementById("daily-goal-category").value;
 
-    createdAt: getToday(),
-  });
+    goal.priority =
+        document.getElementById("daily-goal-priority").value;
+
+    goal.notes =
+        document.getElementById("daily-goal-notes").value.trim();
+
+}else{
+
+    user.dailyGoals.push({
+
+        id:generateId(),
+
+        title,
+
+        category:
+            document.getElementById("daily-goal-category").value,
+
+        priority:
+            document.getElementById("daily-goal-priority").value,
+
+        notes:
+            document.getElementById("daily-goal-notes").value.trim(),
+
+        completed:false,
+
+        createdAt:getToday()
+
+    });
+
+}
 
   updateCurrentUser(user);
 
@@ -185,11 +272,17 @@ function renderDailyGoals() {
 
             <div class="empty-state">
 
-                <i class="ri-checkbox-circle-line"></i>
+    <i class="ri-checkbox-circle-line"></i>
 
-                <p>No Daily Goals</p>
+    <h3>No Daily Goals</h3>
 
-            </div>
+    <p>
+
+        Start planning your day by adding your first goal.
+
+    </p>
+
+</div>
 
         `;
 
@@ -227,17 +320,17 @@ function renderDailyGoals() {
 
         <div class="daily-meta">
 
-            <span class="daily-category">
+            <span class="daily-category ${getCategoryClass(goal.category)}">
 
-                ${goal.category}
+    ${goal.category}
 
-            </span>
+</span>
 
-            <span class="daily-priority">
+            <span class="daily-priority ${goal.priority.toLowerCase()}">
 
-                ${goal.priority}
+    ${goal.priority}
 
-            </span>
+</span>
 
         </div>
 
@@ -247,17 +340,23 @@ function renderDailyGoals() {
 
 </div>
 
-<button
+<div class="daily-actions">
 
-    class="delete-daily-goal"
+    <button
+        class="edit-daily-goal"
+        data-id="${goal.id}"
+    >
+        <i class="ri-edit-line"></i>
+    </button>
 
-    data-id="${goal.id}"
+    <button
+        class="delete-daily-goal"
+        data-id="${goal.id}"
+    >
+        <i class="ri-delete-bin-line"></i>
+    </button>
 
->
-
-    <i class="ri-delete-bin-line"></i>
-
-</button>
+</div>
 
 `;
 
@@ -283,6 +382,21 @@ function handleDailyGoalActions(event) {
 
     renderOverallProgress();
   }
+
+  const editBtn =
+    event.target.closest(".edit-daily-goal");
+
+if(editBtn){
+
+    editDailyGoal(
+
+        Number(editBtn.dataset.id)
+
+    );
+
+    return;
+
+}
 
   const deleteBtn = event.target.closest(".delete-daily-goal");
 
@@ -356,17 +470,75 @@ function initializeHabits() {
     list.addEventListener("click", handleHabitActions);
   }
 
+  const overlay = document.getElementById("habit-modal");
+
+overlay.addEventListener("click",(event)=>{
+
+    if(event.target===overlay){
+
+        closeHabitModal();
+
+    }
+
+});
+
+document.addEventListener("keydown",(event)=>{
+
+    if(
+
+        event.key==="Escape" &&
+
+        !document
+            .getElementById("habit-modal")
+            .classList.contains("hidden")
+
+    ){
+
+        closeHabitModal();
+
+    }
+
+});
+
   renderHabits();
 }
 
-function openHabitModal() {
-  document.getElementById("habit-modal").classList.remove("hidden");
+function openHabitModal(){
+
+    document
+        .getElementById("habit-modal")
+        .classList.remove("hidden");
+
+    document
+        .getElementById("habit-title")
+        .focus();
+
 }
 
-function closeHabitModal() {
-  document.getElementById("habit-modal").classList.add("hidden");
+function closeHabitModal(){
 
-  document.getElementById("habit-form").reset();
+    editingHabitId = null;
+
+    document
+        .getElementById("habit-modal")
+        .classList.add("hidden");
+
+    document
+        .getElementById("habit-form")
+        .reset();
+
+    document.querySelector(
+
+        "#habit-modal h2"
+
+    ).textContent = "Add Habit";
+
+    document.querySelector(
+
+        '#habit-form button[type="submit"]'
+
+    ).textContent = "Save Habit";
+
 }
 
 function saveHabit(event) {
@@ -378,23 +550,58 @@ function saveHabit(event) {
 
   const title = document.getElementById("habit-title").value.trim();
 
+  const exists = user.habits.some(habit =>
+
+    habit.title.toLowerCase() === title.toLowerCase() &&
+    habit.id !== editingHabitId
+
+);
+
+if(exists){
+
+    alert("Habit already exists.");
+
+    return;
+
+}
+
   if (title === "") return;
 
-  user.habits.push({
-    id: generateId(),
+  if(editingHabitId){
 
-    title,
+    const habit = user.habits.find(
 
-    category: document.getElementById("habit-category").value,
+        item=>item.id===editingHabitId
 
-    streak: 0,
+    );
 
-    longestStreak: 0,
+    habit.title = title;
 
-    completedToday: false,
+    habit.category =
+        document.getElementById("habit-category").value;
 
-    lastCompleted: null,
-  });
+}else{
+
+    user.habits.push({
+
+        id:generateId(),
+
+        title,
+
+        category:
+            document.getElementById("habit-category").value,
+
+        streak:0,
+
+        longestStreak:0,
+
+        completedToday:false,
+
+        lastCompleted:null
+
+    });
+
+}
 
   updateCurrentUser(user);
 
@@ -435,64 +642,114 @@ function renderHabits() {
 
     card.innerHTML = `
 
-            <div class="habit-header">
+<div class="habit-header">
 
-                <div>
+    <div>
 
-                    <h4>${habit.title}</h4>
+        <h4>${habit.title}</h4>
 
-                    <span>${habit.category}</span>
+        <span class="habit-category">
+            ${habit.category}
+        </span>
 
-                </div>
+    </div>
 
-                <div class="habit-streak">
+    <div class="habit-actions">
 
-                    🔥 ${habit.streak} Day Streak
+    <button
+        class="edit-habit-btn"
+        data-id="${habit.id}"
+    >
+        <i class="ri-edit-line"></i>
+    </button>
 
-                </div>
+    <button
+        class="delete-habit-btn"
+        data-id="${habit.id}"
+    >
+        <i class="ri-delete-bin-line"></i>
+    </button>
 
-                <div class="habit-longest">
+</div>
 
-                    Best: ${habit.longestStreak}
+</div>
 
-                </div>
+<div class="habit-streak">
 
-            </div>
+    🔥 ${habit.streak} Day Streak
 
-            <button
+</div>
 
-                class="habit-complete-btn"
+<div class="habit-longest">
 
-                data-id="${habit.id}"
+    Best : ${habit.longestStreak}
 
-            >
+</div>
 
-                ${habit.completedToday ? "Completed Today" : "Mark Complete"}
+<button
 
-            </button>
+    class="habit-complete-btn"
 
-        `;
+    data-id="${habit.id}"
+
+    ${habit.completedToday ? "disabled" : ""}
+
+>
+
+    ${habit.completedToday ? "Completed Today" : "Mark Complete"}
+
+</button>
+
+`;
 
     container.appendChild(card);
   });
 }
 
 function handleHabitActions(event) {
-  const button = event.target.closest(".habit-complete-btn");
-
-  if (!button) return;
-
   const user = getCurrentUser();
 
   if (!user) return;
 
-  const id = Number(button.dataset.id);
+  const editBtn =
+
+    event.target.closest(".edit-habit-btn");
+
+if(editBtn){
+
+    editHabit(
+
+        Number(editBtn.dataset.id)
+
+    );
+
+    return;
+
+}
+
+  const deleteBtn = event.target.closest(".delete-habit-btn");
+
+  if (deleteBtn) {
+    const id = Number(deleteBtn.dataset.id);
+
+    user.habits = user.habits.filter((habit) => habit.id !== id);
+
+    updateCurrentUser(user);
+
+    renderHabits();
+
+    return;
+  }
+
+  const completeBtn = event.target.closest(".habit-complete-btn");
+
+  if (!completeBtn) return;
+
+  const id = Number(completeBtn.dataset.id);
 
   const habit = user.habits.find((item) => item.id === id);
 
   if (!habit) return;
-
-  if (habit.completedToday) return;
 
   completeHabit(habit);
 
@@ -527,36 +784,169 @@ function completeHabit(habit) {
   }
 }
 
-
 /* ==========================
         INITIALIZE CATEGORIES
 ========================== */
 
-function initializeCategories(){
+function initializeCategories() {
+  const addBtn = document.getElementById("add-category-btn");
 
-    renderCategories();
+  const closeBtn = document.getElementById("close-category-modal");
+
+  const cancelBtn = document.getElementById("cancel-category");
+
+  const form = document.getElementById("category-form");
+
+  const container = document.getElementById("life-categories");
+
+  addBtn.addEventListener(
+    "click",
+
+    openCategoryModal,
+  );
+
+  closeBtn.addEventListener(
+    "click",
+
+    closeCategoryModal,
+  );
+
+  cancelBtn.addEventListener(
+    "click",
+
+    closeCategoryModal,
+  );
+
+  form.addEventListener(
+    "submit",
+
+    saveCategory,
+  );
+
+  container.addEventListener(
+    "click",
+
+    handleCategoryActions,
+  );
+
+  const goalForm = document.getElementById("category-goal-form");
+
+  const goalClose = document.getElementById("close-category-goal-modal");
+
+  const goalCancel = document.getElementById("cancel-category-goal");
+
+  goalForm.addEventListener("submit", saveCategoryGoal);
+
+  goalClose.addEventListener("click", closeCategoryGoalModal);
+
+  goalCancel.addEventListener("click", closeCategoryGoalModal);
+
+  renderCategories();
+}
+
+function openCategoryModal() {
+  document
+
+    .getElementById("category-modal")
+
+    .classList.remove("hidden");
+}
+
+function closeCategoryModal(){
+
+    editingCategoryId = null;
+
+    document
+        .getElementById("category-modal")
+        .classList.add("hidden");
+
+    document
+        .getElementById("category-form")
+        .reset();
+
+    document.querySelector(
+        "#category-modal h2"
+    ).textContent = "Add Category";
+
+    document.querySelector(
+        '#category-form button[type="submit"]'
+    ).textContent = "Save Category";
 
 }
 
-function renderCategories(){
+function openCategoryGoalModal(categoryId) {
+  document.getElementById("selected-category-id").value = categoryId;
 
-    const user = getCurrentUser();
+  document.getElementById("category-goal-modal").classList.remove("hidden");
+}
 
-    if(!user) return;
+function closeCategoryGoalModal() {
+  document.getElementById("category-goal-modal").classList.add("hidden");
 
-    const container =
+  document.getElementById("category-goal-form").reset();
+}
 
-        document.getElementById(
+function saveCategory(event) {
+  event.preventDefault();
 
-            "life-categories"
+  const user = getCurrentUser();
+
+  if (!user) return;
+
+  const name = document
+
+    .getElementById("category-name")
+
+    .value.trim();
+
+  if (name === "") return;
+
+  if(editingCategoryId){
+
+    const category =
+
+        user.categories.find(
+
+            item=>item.id===editingCategoryId
 
         );
 
-    container.innerHTML="";
+    category.name = name;
 
-    if(user.categories.length===0){
+}else{
 
-        container.innerHTML=`
+    user.categories.push({
+
+        id:generateId(),
+
+        name,
+
+        expanded:false,
+
+        goals:[]
+
+    });
+
+}
+
+  updateCurrentUser(user);
+
+  closeCategoryModal();
+
+  renderCategories();
+}
+
+function renderCategories() {
+  const user = getCurrentUser();
+
+  if (!user) return;
+
+  const container = document.getElementById("life-categories");
+
+  container.innerHTML = "";
+
+  if (user.categories.length === 0) {
+    container.innerHTML = `
 
             <div class="empty-state">
 
@@ -568,80 +958,104 @@ function renderCategories(){
 
         `;
 
-        return;
+    return;
+  }
 
-    }
-
-    user.categories.forEach(category=>{
-
-        container.appendChild(
-
-            createCategoryCard(category)
-
-        );
-
-    });
-
+  user.categories.forEach((category) => {
+    container.appendChild(createCategoryCard(category));
+  });
 }
 
-function getCategoryProgress(category){
+function getCategoryProgress(category) {
+  const total = category.goals.length;
 
-    const total = category.goals.length;
+  if (total === 0) {
+    return 0;
+  }
 
-    if(total===0){
+  const completed = category.goals.filter((goal) => goal.completed).length;
 
-        return 0;
-
-    }
-
-    const completed =
-
-        category.goals.filter(
-
-            goal=>goal.completed
-
-        ).length;
-
-    return Math.round(
-
-        completed/total*100
-
-    );
-
+  return Math.round((completed / total) * 100);
 }
 
-function createCategoryCard(category){
+function createCategoryCard(category) {
 
-    const progress =
-        getCategoryProgress(category);
+    const totalGoals =
+    category.goals.length;
 
-    const card =
-        document.createElement("div");
+const completedGoals =
 
-    card.className="category-card";
+    category.goals.filter(
 
-    card.innerHTML=`
+        goal=>goal.completed
+
+    ).length;
+  const progress = getCategoryProgress(category);
+
+  const card = document.createElement("div");
+
+  card.className = "category-card";
+
+  card.innerHTML = `
 
         <div
-            class="category-header"
-            data-id="${category.id}"
-        >
+    class="category-header"
+    data-id="${category.id}"
+>
 
-            <div>
+    <div>
 
-                <h3>${category.name}</h3>
+        <h3>${category.name}</h3>
 
-                <small>
+        <div class="category-stats">
 
-                    ${progress}% Complete
+    <span>
 
-                </small>
+        ${completedGoals}/${totalGoals}
 
-            </div>
+    </span>
 
-            <i class="ri-arrow-down-s-line"></i>
+    <span>
 
-        </div>
+        ${progress}%
+
+    </span>
+
+</div>
+
+    </div>
+
+   <div class="category-header-actions">
+
+    <button
+
+        class="edit-category-btn"
+
+        data-id="${category.id}"
+
+    >
+
+        <i class="ri-edit-line"></i>
+
+    </button>
+
+    <button
+
+        class="delete-category-btn"
+
+        data-id="${category.id}"
+
+    >
+
+        <i class="ri-delete-bin-line"></i>
+
+    </button>
+
+    <i class="ri-arrow-down-s-line"></i>
+
+</div>
+
+</div>
 
         <div class="category-progress">
 
@@ -666,24 +1080,16 @@ function createCategoryCard(category){
 
     `;
 
-    const body =
-        card.querySelector(".category-body");
+  const body = card.querySelector(".category-body");
 
-    category.goals.forEach(goal=>{
+  category.goals.forEach((goal) => {
+    body.appendChild(createCategoryGoal(goal));
+  });
 
-        body.appendChild(
+  body.insertAdjacentHTML(
+    "beforeend",
 
-            createCategoryGoal(goal)
-
-        );
-
-    });
-
-    body.insertAdjacentHTML(
-
-        "beforeend",
-
-        `
+    `
 
         <button
 
@@ -699,70 +1105,141 @@ function createCategoryCard(category){
 
         </button>
 
-        `
+        `,
+  );
 
-    );
-
-    return card;
-
+  return card;
 }
 
+function createCategoryGoal(goal) {
+  const row = document.createElement("div");
 
-function createCategoryGoal(goal){
+  row.className = "category-goal";
 
-    const row =
-        document.createElement("div");
+  row.innerHTML = `
 
-    row.className="category-goal";
+        <div class="category-goal-left">
 
-    row.innerHTML=`
+            <label>
 
-        <label>
+                <input
 
-            <input
+                    type="checkbox"
 
-                type="checkbox"
+                    class="category-checkbox"
 
-                class="category-checkbox"
+                    data-id="${goal.id}"
 
-                data-id="${goal.id}"
+                    ${goal.completed ? "checked" : ""}
 
-                ${goal.completed?"checked":""}
+                >
 
-            >
+                <span>
 
-            ${goal.title}
+                    ${goal.title}
 
-        </label>
+                </span>
+
+            </label>
+
+        </div>
+
+        <button
+
+            class="delete-category-goal"
+
+            data-id="${goal.id}"
+
+        >
+
+            <i class="ri-delete-bin-line"></i>
+
+        </button>
 
     `;
 
-    return row;
-
-}
-
-function initializeCategories(){
-
-    const container =
-        document.getElementById(
-
-            "life-categories"
-
-        );
-
-    container.addEventListener(
-
-        "click",
-
-        handleCategoryActions
-
-    );
-
-    renderCategories();
-
+  return row;
 }
 
 function handleCategoryActions(event){
+
+    const editBtn =
+
+    event.target.closest(".edit-category-btn");
+
+if(editBtn){
+
+    editCategory(
+
+        Number(editBtn.dataset.id)
+
+    );
+
+    return;
+
+}
+
+    const deleteCategoryBtn =
+        event.target.closest(".delete-category-btn");
+
+    if(deleteCategoryBtn){
+
+        deleteCategory(
+
+            Number(deleteCategoryBtn.dataset.id)
+
+        );
+
+        return;
+
+    }
+
+    const deleteGoalBtn =
+        event.target.closest(".delete-category-goal");
+
+    if(deleteGoalBtn){
+
+        deleteCategoryGoal(
+
+            Number(deleteGoalBtn.dataset.id)
+
+        );
+
+        return;
+
+    }
+
+    const addGoalBtn =
+        event.target.closest(".add-category-goal");
+
+    if(addGoalBtn){
+
+        openCategoryGoalModal(
+
+            Number(addGoalBtn.dataset.id)
+
+        );
+
+        return;
+
+    }
+
+    const checkbox =
+        event.target.closest(".category-checkbox");
+
+    if(checkbox){
+
+        toggleCategoryGoal(
+
+            Number(checkbox.dataset.id),
+
+            checkbox.checked
+
+        );
+
+        return;
+
+    }
 
     const header =
         event.target.closest(".category-header");
@@ -775,29 +1252,229 @@ function handleCategoryActions(event){
 
         );
 
-        return;
-
     }
 
 }
 
-function toggleCategory(categoryId){
+function editCategory(categoryId){
 
-    const user =
-        getCurrentUser();
+    const user = getCurrentUser();
+
+    if(!user) return;
 
     const category =
+
         user.categories.find(
 
             item=>item.id===categoryId
 
         );
 
-    category.expanded =
-        !category.expanded;
+    if(!category) return;
 
-    updateCurrentUser(user);
+    editingCategoryId = category.id;
 
-    renderCategories();
+    document.getElementById(
+
+        "category-name"
+
+    ).value = category.name;
+
+    document.querySelector(
+
+        "#category-modal h2"
+
+    ).textContent = "Edit Category";
+
+    document.querySelector(
+
+        '#category-form button[type="submit"]'
+
+    ).textContent = "Save Changes";
+
+    openCategoryModal();
 
 }
+
+function deleteCategory(categoryId) {
+  const confirmDelete = confirm("Delete this category and all its goals?");
+
+  if (!confirmDelete) {
+    return;
+  }
+
+  const user = getCurrentUser();
+
+  if (!user) return;
+
+  user.categories = user.categories.filter(
+    (category) => category.id !== categoryId,
+  );
+
+  updateCurrentUser(user);
+
+  renderCategories();
+}
+
+function toggleCategoryGoal(goalId, completed) {
+  const user = getCurrentUser();
+
+  if (!user) return;
+
+  user.categories.forEach((category) => {
+    const goal = category.goals.find((item) => item.id === goalId);
+
+    if (goal) {
+      goal.completed = completed;
+    }
+  });
+
+  updateCurrentUser(user);
+
+  renderCategories();
+}
+
+function deleteCategoryGoal(goalId) {
+  const user = getCurrentUser();
+
+  if (!user) return;
+
+  user.categories.forEach((category) => {
+    category.goals = category.goals.filter((goal) => goal.id !== goalId);
+  });
+
+  updateCurrentUser(user);
+
+  renderCategories();
+}
+
+function toggleCategory(categoryId) {
+  const user = getCurrentUser();
+
+  const category = user.categories.find((item) => item.id === categoryId);
+
+  category.expanded = !category.expanded;
+
+  updateCurrentUser(user);
+
+  renderCategories();
+}
+function saveCategoryGoal(event) {
+  event.preventDefault();
+
+  const user = getCurrentUser();
+
+  if (!user) return;
+
+  const categoryId = Number(
+    document.getElementById("selected-category-id").value,
+  );
+
+  const title = document.getElementById("category-goal-title").value.trim();
+
+  if (title === "") return;
+
+  const category = user.categories.find((item) => item.id === categoryId);
+
+  if (!category) return;
+
+  category.goals.push({
+    id: generateId(),
+
+    title,
+
+    completed: false,
+  });
+
+  updateCurrentUser(user);
+
+  closeCategoryGoalModal();
+
+  renderCategories();
+}
+
+
+
+function editDailyGoal(goalId){
+
+    const user = getCurrentUser();
+
+    if(!user) return;
+
+    const goal = user.dailyGoals.find(
+
+        item => item.id === goalId
+
+    );
+
+    if(!goal) return;
+
+    editingDailyGoalId = goal.id;
+
+    document.getElementById("daily-goal-title").value =
+        goal.title;
+
+    document.getElementById("daily-goal-category").value =
+        goal.category;
+
+    document.getElementById("daily-goal-priority").value =
+        goal.priority;
+
+    document.getElementById("daily-goal-notes").value =
+        goal.notes;
+
+    document.querySelector(
+
+        "#daily-goal-modal h2"
+
+    ).textContent = "Edit Daily Goal";
+
+    document.querySelector(
+
+        '#daily-goal-form button[type="submit"]'
+
+    ).textContent = "Save Changes";
+
+    openDailyGoalModal();
+
+}
+
+
+function editHabit(habitId){
+
+    const user = getCurrentUser();
+
+    if(!user) return;
+
+    const habit = user.habits.find(
+
+        item=>item.id===habitId
+
+    );
+
+    if(!habit) return;
+
+    editingHabitId = habit.id;
+
+    document.getElementById("habit-title").value =
+        habit.title;
+
+    document.getElementById("habit-category").value =
+        habit.category;
+
+    document.querySelector(
+
+        "#habit-modal h2"
+
+    ).textContent = "Edit Habit";
+
+    document.querySelector(
+
+        '#habit-form button[type="submit"]'
+
+    ).textContent = "Save Changes";
+
+    openHabitModal();
+
+}
+
