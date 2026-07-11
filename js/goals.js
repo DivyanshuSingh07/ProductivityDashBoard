@@ -66,7 +66,21 @@ function resetHabits(user) {
   });
 }
 
+
+
+
+
 function renderGreeting() {
+
+    const dynamicGreetings = [
+    `Focus on today, dream for tomorrow.`,
+    `From today's habits to lifetime goals—let's get it done.`,
+    `Ready to map out your day and your future?`,
+    `Let's check some things off that bucket list.`
+];
+
+// Picks a random line from the array above
+const randomLine = dynamicGreetings[Math.floor(Math.random() * dynamicGreetings.length)];
   const hour = new Date().getHours();
 
   let greeting = "";
@@ -81,8 +95,9 @@ function renderGreeting() {
 
   const user = getCurrentUser();
 
-  document.getElementById("goal-greeting").textContent =
-    `${greeting}, ${user.fullName}`;
+  document.getElementById("goal-greeting").textContent = 
+    `${greeting}, ${user.fullName}! ${randomLine}`;
+    
 }
 
 function renderOverallProgress() {
