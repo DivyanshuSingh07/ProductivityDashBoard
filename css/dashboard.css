@@ -102,26 +102,21 @@ body{
 
 }
 
-.logo{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:.8rem;
-
-    font-size:1.6rem;
-
-    font-weight:700;
-
-    color:var(--primary-color);
-
+.logo {
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--primary-color);
 }
 
-.logo i{
-
-    font-size:2rem;
-
+/* Add this to target and size your new image */
+.logo img {
+    height: 5.5rem;       
+    width: auto;        
+    object-fit: contain;
+    border-radius: 50%;
 }
 
 /* ==========================
