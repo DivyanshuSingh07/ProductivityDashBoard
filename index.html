@@ -119,11 +119,107 @@
         =========================== -->
 
         <section id="dashboard-section" class="page-section active-section">
+
+            
+
           <div class="section-heading">
             <h2>Dashboard Overview</h2>
 
             <p>Here's a quick overview of your productivity.</p>
           </div>
+
+
+          <!-- ==========================
+            HERO
+    =========================== -->
+
+    <section class="dashboard-hero">
+
+        <div id="hero-animation"></div>
+
+        <div class="hero-overlay"></div>
+
+
+        <div class="hero-content">
+
+            <div class="hero-left">
+
+                <span class="hero-tag">
+
+                    Productivity Workspace
+
+                </span>
+
+                <h1 id="hero-title">
+
+                    Good Morning
+
+                </h1>
+
+                <p id="hero-description">
+
+                    Every small step today builds tomorrow's success.
+
+                </p>
+
+                <div class="hero-buttons">
+
+                    <button
+                        class="primary-btn"
+                        id="change-theme-btn"
+                    >
+
+                        <i class="ri-palette-line"></i>
+
+                        Themes
+
+                    </button>
+
+                    <button
+                        class="secondary-btn"
+                        id="change-wallpaper-btn"
+                    >
+
+                        <i class="ri-image-line"></i>
+
+                        Wallpapers
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="hero-right">
+
+                <div class="glass-card">
+
+                    <h3>
+
+                        Today's Focus
+
+                    </h3>
+
+                    <h2 id="hero-focus">
+
+                        Stay Consistent
+
+                    </h2>
+
+                    <p>
+
+                        Small progress every day is better than perfection once.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
 
           <!-- ==========================
                     STATS CARDS
@@ -184,7 +280,7 @@
                     QUICK PANELS
             =========================== -->
 
-          <div class="dashboard-grid">
+          <!-- <div class="dashboard-grid">
             <div class="dashboard-card">
               <div class="card-header">
                 <h3>Today's Tasks</h3>
@@ -201,7 +297,7 @@
               <div id="dashboard-planner-preview">Nothing scheduled.</div>
             </div>
           </div>
-        </section>
+        </section> -->
 
         <!-- ==========================
                 TODO SECTION
@@ -1416,6 +1512,88 @@
     </div>
 
 </div>
+
+<!-- ==========================
+        THEME PICKER
+========================== -->
+
+<div
+    id="theme-modal"
+    class="modal-overlay hidden"
+>
+
+    <div class="modal theme-modal">
+
+        <div class="modal-header">
+
+            <h2>
+
+                Choose Theme
+
+            </h2>
+
+            <button
+                id="close-theme-modal"
+                class="modal-close"
+            >
+
+                <i class="ri-close-line"></i>
+
+            </button>
+
+        </div>
+
+        <div
+            id="theme-grid"
+            class="theme-grid"
+        >
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ==========================
+        WALLPAPER PICKER
+========================== -->
+
+<div
+    id="wallpaper-modal"
+    class="modal-overlay hidden"
+>
+
+    <div class="modal theme-modal">
+
+        <div class="modal-header">
+
+            <h2>
+
+                Choose Wallpaper
+
+            </h2>
+
+            <button
+                id="close-wallpaper-modal"
+                class="modal-close"
+            >
+
+                <i class="ri-close-line"></i>
+
+            </button>
+
+        </div>
+
+        <div
+            id="wallpaper-grid"
+            class="theme-grid"
+        >
+
+        </div>
+
+    </div>
+
+</div>
     
     <div id="toast-container" class="toast-container"></div>
 
@@ -1424,6 +1602,8 @@
     ========================== -->
 
     <script src="./js/utils.js"></script>
+    <script src="./js/dashboardHero.js"></script>
+    <script src="./js/heroAnimations.js"></script>
     <script src="./js/ui.js"></script>
     <script src="./js/navigation.js"></script>
     <script src="./js/theme.js"></script>

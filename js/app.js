@@ -18,6 +18,12 @@ function initializeApp() {
 
     initializeDateTime();
 
+    initializeDashboardHero();
+    
+   initializeHeroThemePicker();
+
+   initializeWallpaperPicker();
+
     initializeTheme();
 
     initializeModal();

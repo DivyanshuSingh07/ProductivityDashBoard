@@ -208,7 +208,92 @@ registerForm.addEventListener("submit", (e) => {
     return;
   }
 
-  const newUser = {
+//   const newUser = {
+//     id: Date.now(),
+
+//     fullName: fullNameValue,
+
+//     username: usernameValue,
+
+//     email: emailValue,
+
+//     password: passwordValue,
+
+//     theme: "light",
+    
+//     dashboardTheme: "auto",
+
+//     heroSettings: {
+
+//     mode: "auto",
+
+//     theme: null,
+
+//     animation: "auto",
+
+//     wallpaper: "",
+
+//     slideshow: false,
+
+//     slideshowInterval: 10000,
+
+//     slideshowImages: [],
+
+//     customThemes: []
+
+// },
+
+//     profileImage: "",
+
+//     createdAt: new Date().toISOString(),
+
+//     todos: [],
+
+//     planner: [],
+
+//     goals: [],
+
+//     favoriteQuotes: [],
+
+//     pomodoro: {
+//       sessions: 0,
+
+//       focusMinutes: 0,
+
+//       streak: 0,
+
+//       completed: 0,
+
+//       started: 0,
+
+//       focus: 25,
+
+//       shortBreak: 5,
+
+//       longBreak: 15,
+//     },
+
+//     weather: {
+//       city: "",
+
+//       temperature: null,
+
+//       description: "",
+
+//       updatedAt: null,
+//     },
+
+//     dailyGoals: [],
+//     habits: [],
+//     categories: [],
+//     lifeGoals: [],
+//     bucketList: [],
+//     reflections: [],
+//     achievements: [],
+//   };
+
+const newUser = {
+
     id: Date.now(),
 
     fullName: fullNameValue,
@@ -225,50 +310,60 @@ registerForm.addEventListener("submit", (e) => {
 
     createdAt: new Date().toISOString(),
 
-    todos: [],
+   heroSettings:{
 
-    planner: [],
+    mode:"auto",
 
-    goals: [],
+    selectedTheme:null,
 
-    favoriteQuotes: [],
+    selectedWallpaper:null,
 
-    pomodoro: {
-      sessions: 0,
+    animation:null,
 
-      focusMinutes: 0,
+    slideshow:false,
 
-      streak: 0,
+    slideshowInterval:10000,
 
-      completed: 0,
+    uploadedWallpapers:[],
 
-      started: 0,
+    customThemes:[]
 
-      focus: 25,
+},
 
-      shortBreak: 5,
+    todos:[],
 
-      longBreak: 15,
+    planner:[],
+
+    goals:[],
+
+    favoriteQuotes:[],
+
+    pomodoro:{
+        sessions:0,
+        focusMinutes:0,
+        streak:0,
+        completed:0,
+        started:0,
+        focus:25,
+        shortBreak:5,
+        longBreak:15
     },
 
-    weather: {
-      city: "",
-
-      temperature: null,
-
-      description: "",
-
-      updatedAt: null,
+    weather:{
+        city:"",
+        temperature:null,
+        description:"",
+        updatedAt:null
     },
 
-    dailyGoals: [],
-    habits: [],
-    categories: [],
-    lifeGoals: [],
-    bucketList: [],
-    reflections: [],
-    achievements: [],
-  };
+    dailyGoals:[],
+    habits:[],
+    categories:[],
+    lifeGoals:[],
+    bucketList:[],
+    reflections:[],
+    achievements:[]
+};
 
   users.push(newUser);
 
