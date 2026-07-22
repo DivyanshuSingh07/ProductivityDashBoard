@@ -25,7 +25,8 @@ function initializeWeather() {
 
   const cityInput = document.getElementById("city-input");
 
-  loadSavedWeather();
+  loadSavedWeather(); //Error
+
 
   if (cityInput) {
     cityInput.addEventListener(
@@ -49,7 +50,7 @@ function loadSavedWeather() {
     if (user.weather.temperature === null) return;
 
     document.getElementById("dashboard-weather-temp").textContent =
-        `${user.weather.temperature}°C`;
+        `${user.weather.temperature}°C`; //Error
 
     document.getElementById("weather-city").textContent =
         user.weather.city;
@@ -166,8 +167,8 @@ async function fetchWeather(
 ) {
   try {
     const response = await fetch(
-      `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m`,
-    );
+`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,surface_pressure,visibility,is_day&daily=sunrise,sunset&timezone=auto`
+);
 
     const data = await response.json();
 
@@ -180,10 +181,10 @@ async function fetchWeather(
     }
 
     renderWeather(
-      city,
-
-      data.current,
-    );
+    city,
+    data.current,
+    data.daily
+);
 
     document.getElementById("city-input").value = "";
   } catch {
@@ -202,58 +203,134 @@ async function fetchWeather(
 ========================== */
 
 function renderWeather(
-  city,
+    city,
+    weather,
+    daily
+){
 
-  weather,
-) {
-  document.getElementById("weather-city").textContent = city;
+    document.getElementById(
+        "weather-city"
+    ).textContent = city;
 
-  const temperature = Math.round(weather.temperature_2m);
+    const temperature =
+        Math.round(
+            weather.temperature_2m
+        );
 
-  const user = getCurrentUser();
+    const user =
+        getCurrentUser();
 
-if (user) {
+    if(user){
 
-    user.weather = {
+        user.weather = {
 
-        city,
+            city,
 
-        temperature,
+            temperature,
 
-        description: getWeatherDescription(
+            description:
+                getWeatherDescription(
+                    weather.weather_code
+                ),
+
+            feelsLike:
+                Math.round(
+                    weather.apparent_temperature
+                ),
+
+            humidity:
+                weather.relative_humidity_2m,
+
+            wind:
+                weather.wind_speed_10m,
+
+            pressure:
+                Math.round(
+                    weather.surface_pressure
+                ),
+
+            visibility:
+                Math.round(
+                    weather.visibility / 1000
+                ),
+
+            weatherCode:
+                weather.weather_code,
+
+            isDay:
+                weather.is_day === 1,
+
+            sunrise:
+                daily.sunrise[0],
+
+            sunset:
+                daily.sunset[0],
+
+            updatedAt:
+                new Date().toISOString()
+
+        };
+
+        console.log(
+            "Weather Saved:",
+            user.weather
+        );
+
+        updateCurrentUser(
+            user
+        );
+
+        updateHeroWeather(
+            user.weather
+        );
+
+    }
+
+    document.getElementById(
+        "weather-temp"
+    ).textContent =
+        temperature;
+
+    const dashboardTemp =
+        document.getElementById(
+            "dashboard-weather-temp"
+        );
+
+    if(dashboardTemp){
+
+        dashboardTemp.textContent =
+            `${temperature}°C`;
+
+    }
+
+    document.getElementById(
+        "feels-like"
+    ).textContent =
+        `${Math.round(
+            weather.apparent_temperature
+        )}°C`;
+
+    document.getElementById(
+        "humidity"
+    ).textContent =
+        `${weather.relative_humidity_2m}%`;
+
+    document.getElementById(
+        "wind-speed"
+    ).textContent =
+        `${weather.wind_speed_10m} km/h`;
+
+    document.getElementById(
+        "weather-description"
+    ).textContent =
+        getWeatherDescription(
             weather.weather_code
-        ),
+        );
 
-        updatedAt: new Date().toISOString()
+    getWeatherIcon(
+        weather.weather_code
+    );
 
-    };
-
-    updateCurrentUser(user);
-
-}
-
-  document.getElementById("weather-temp").textContent = temperature;
-
-  const dashboardTemp = document.getElementById("dashboard-weather-temp");
-
-  if (dashboardTemp) {
-    dashboardTemp.textContent = `${temperature}°C`;
-  }
-
-  document.getElementById("feels-like").textContent = `${Math.round(
-    weather.apparent_temperature,
-  )}°C`;
-
-  document.getElementById("humidity").textContent =
-    `${weather.relative_humidity_2m}%`;
-
-  document.getElementById("wind-speed").textContent =
-    `${weather.wind_speed_10m} km/h`;
-
-  document.getElementById("weather-description").textContent =
-    getWeatherDescription(weather.weather_code);
-
-  getWeatherIcon(weather.weather_code);
 }
 
 /* ==========================

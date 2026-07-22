@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="./css/pomodoro.css" />
     <link rel="stylesheet" href="./css/quotes.css" />
     <link rel="stylesheet" href="./css/weather.css" />
+    <link rel="stylesheet" href="./css/heroWeather.css" />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
@@ -270,11 +271,12 @@
             <div class="stat-card">
               <i class="ri-sun-cloudy-line"></i>
 
-              <!-- Dashboard -->
               <h3 id="dashboard-weather-temp">--</h3>
 
               <p>Weather</p>
             </div>
+
+            
           </div>
 
           <!-- ==========================
@@ -300,6 +302,168 @@
           </div>-->
 
 
+          <!-- ==========================
+        HERO WEATHER
+========================== -->
+
+<div class="hero-weather-card weather-default">
+
+    <!-- Dynamic Background -->
+
+    <div class="hero-weather-background">
+
+        <div class="hero-weather-gradient"></div>
+
+        <div id="hero-weather-scene"></div>
+
+    </div>
+
+    <!-- Main Content -->
+
+    <div class="hero-weather-main">
+
+        <!-- LEFT -->
+
+        <div class="hero-weather-left">
+
+            <div class="hero-weather-icon-wrapper">
+
+                <i
+                    id="hero-weather-icon"
+                    class="ri-sun-fill"
+                ></i>
+
+            </div>
+
+            <div>
+
+                <span class="hero-weather-label">
+
+                    Current Weather
+
+                </span>
+
+                <h1 id="hero-weather-temp">
+
+                    --°
+
+                </h1>
+
+                <h3 id="hero-weather-condition">
+
+                    Loading...
+
+                </h3>
+
+                <p id="hero-weather-city">
+
+                    --
+
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+
+        <div class="hero-weather-right">
+
+            <div class="hero-weather-info">
+
+                <i class="ri-temp-hot-line"></i>
+
+                <div>
+
+                    <span>Feels Like</span>
+
+                    <strong id="hero-feels-like">
+
+                        --
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+            <div class="hero-weather-info">
+
+                <i class="ri-drop-line"></i>
+
+                <div>
+
+                    <span>Humidity</span>
+
+                    <strong id="hero-humidity">
+
+                        --
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+            <div class="hero-weather-info">
+
+                <i class="ri-windy-line"></i>
+
+                <div>
+
+                    <span>Wind</span>
+
+                    <strong id="hero-wind">
+
+                        --
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+            <div class="hero-weather-info">
+
+                <i class="ri-speed-up-line"></i>
+
+                <div>
+
+                    <span>Pressure</span>
+
+                    <strong id="hero-pressure">
+
+                        --
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+
+    <div class="hero-weather-footer">
+
+        <p id="hero-weather-message">
+
+            Stay productive today.
+
+        </p>
+
+        <span id="hero-weather-time">
+
+            Updated --
+
+        </span>
+
+    </div>
+
+</div>
         </section>
 
         <!-- ==========================
@@ -1600,6 +1764,7 @@
 
     <script src="./js/utils.js"></script>
     <script src="./js/dashboardHero.js"></script>
+    <script src="./js/heroWeather.js"></script>
     <script src="./js/heroAnimations.js"></script>
     <script src="./js/ui.js"></script>
     <script src="./js/navigation.js"></script>

@@ -349,13 +349,42 @@ const newUser = {
         longBreak:15
     },
 
-    weather:{
-        city:"",
-        temperature:null,
-        description:"",
-        updatedAt:null
-    },
+    // weather:{
+    //     city:"",
+    //     temperature:null,
+    //     description:"",
+    //     updatedAt:null
+    // },
 
+weather:{
+
+    city:"",
+
+    temperature:null,
+
+    description:"",
+
+    feelsLike:null,
+
+    humidity:null,
+
+    wind:null,
+
+    visibility:null,
+
+    pressure:null,
+
+    weatherCode:null,
+    
+    isDay: null,
+
+    sunrise: null,
+
+    sunset: null,
+
+    updatedAt:null
+
+},
     dailyGoals:[],
     habits:[],
     categories:[],
